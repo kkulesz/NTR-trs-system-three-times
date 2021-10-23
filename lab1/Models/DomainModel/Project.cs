@@ -4,7 +4,13 @@ namespace lab1.Models
 {
     public class Project
     {
-        public readonly string Name;
-        public readonly string Owner;
+        public string Name { get; }
+        public string Owner { get; }
+
+        public Project(string name, string owner)
+        {
+            Name = name;
+            Owner = owner;
+        }
     }
 }
