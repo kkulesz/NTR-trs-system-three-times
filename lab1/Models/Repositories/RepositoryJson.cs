@@ -2,41 +2,44 @@ using System;
 using System.IO;
 using System.Text.Json;
 using System.Collections.Generic;
-using Microsoft.CodeAnalysis;
-
+using LanguageExt;
 
 namespace lab1.Models
 {
     public class RepositoryJson : Repository
     {
-        override public Optional<User> GetUser(string login)
+        override public Option<User> GetUser(string login)
         {
             //todo
-            if(login == "error")
-                return new Optional<User>();
+            if (login == "error")
+                return Option<User>.None;
             else
-                return new Optional<User>(new User(login));
+                return Option<User>.Some(new User(login));
         }
 
-        override public Optional<User> CreateUser(User user)
+        override public Option<User> CreateUser(User user)
         {
+            if (user.Login == "error")
+            {
+                return Option<User>.None;
+            }
             string json = JsonSerializer.Serialize(user);
             string filePath = _prepareFilePath(user.Login);
 
             File.WriteAllText(filePath, json);
 
-            return new Optional<User>(user);
+            return Option<User>.Some(user);
         }
 
-        override public Optional<Project> GetProject(string name)
+        override public Option<Project> GetProject(string name)
         {
             //todo
-            return new Optional<Project>(new Project("", ""));
+            return Option<Project>.Some(new Project("", ""));
         }
-        override public Optional<Project> CreateProject(Project project)
+        override public Option<Project> CreateProject(Project project)
         {
             //todo
-            return new Optional<Project>(new Project("", ""));
+            return Option<Project>.Some(new Project("", ""));
         }
 
         override public List<Activity> GetActivitiesForUser(string userLogin)
@@ -45,10 +48,10 @@ namespace lab1.Models
             return new List<Activity>();
         }
 
-        override public Optional<Activity> CreateActivity(Activity activity)
+        override public Option<Activity> CreateActivity(Activity activity)
         {
             //todo
-            return new Optional<Activity>(new Activity("", "", "", 0, true, DateTime.Now));
+            return Option<Activity>.Some(new Activity("", "", "", 0, true, DateTime.Now));
         }
 
 

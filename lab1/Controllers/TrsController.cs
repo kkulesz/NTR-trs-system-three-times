@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using lab1.Models;
 
 namespace lab1.Controllers
@@ -12,25 +11,13 @@ namespace lab1.Controllers
 
         public IActionResult GetUser(string login)
         {
-            var userOpt = _repo.GetUser(login);
-
-            if (userOpt.HasValue)
-                return Ok(userOpt.Value);
-            else
-                return NotFound();
-
+            return _repo.GetUser(login).Match<IActionResult>(Ok, NotFound);
         }
 
         [HttpPost]
         public IActionResult CreateUser([FromBody]User user)
         {
-            var userOpt = _repo.CreateUser(user);
-
-            if (userOpt.HasValue)
-                return Ok(userOpt.Value);
-            else
-                return Conflict();
-
+            return _repo.CreateUser(user).Match<IActionResult>(Ok, Conflict);
         }
 
         private Repository _repo = new RepositoryJson();
