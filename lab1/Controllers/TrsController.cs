@@ -22,6 +22,6 @@ namespace lab1.Controllers
             return _repo.CreateUser(user).Match<IActionResult>(Ok, Conflict);
         }
 
-        private Repository _repo = new RepositoryJson();
+        private IRepository _repo = new RepositoryJson();
     }
 }

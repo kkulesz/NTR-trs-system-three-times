@@ -8,14 +8,14 @@ using lab1.Models.DomainModel;
 
 namespace lab1.Models.Repositories
 {
-    public class RepositoryJson : Repository
+    public class RepositoryJson : IRepository
     {
         public RepositoryJson()
         {
             _initializeRepo();
         }
 
-        override public Option<User> GetUser(string login)
+        public Option<User> GetUser(string login)
         {
             List<User> users = _getAllUsers();
             User user = users.Find(u => u.Login == login);
@@ -29,7 +29,7 @@ namespace lab1.Models.Repositories
             }
         }
 
-        override public Option<User> CreateUser(User user)
+        public Option<User> CreateUser(User user)
         {
             List<User> users = _getAllUsers();
             if (users.Exists(u => u.Login == user.Login))
@@ -46,24 +46,24 @@ namespace lab1.Models.Repositories
             }
         }
 
-        override public Option<Project> GetProject(string name)
+        public Option<Project> GetProject(string name)
         {
             //todo
             return Option<Project>.Some(new Project("", ""));
         }
-        override public Option<Project> CreateProject(Project project)
+        public Option<Project> CreateProject(Project project)
         {
             //todo
             return Option<Project>.Some(new Project("", ""));
         }
 
-        override public List<Activity> GetActivitiesForUser(string userLogin)
+        public List<Activity> GetActivitiesForUser(string userLogin)
         {
             //todo
             return new List<Activity>();
         }
 
-        override public Option<Activity> CreateActivity(Activity activity)
+        public Option<Activity> CreateActivity(Activity activity)
         {
             //todo
             return Option<Activity>.Some(new Activity("", "", "", 0, true, DateTime.Now));
