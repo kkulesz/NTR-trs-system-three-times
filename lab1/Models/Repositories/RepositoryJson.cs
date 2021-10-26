@@ -11,6 +11,8 @@ namespace lab1.Models.Repositories
     /**
     TODO:
     1. Think about C#'s Option methods, if its not that convinient to use then simply define own exceptions and handle them
+    2. enclode GetAll* methods' results into pagination, Page class needed
+    3. CRU for activities
     */
     public class RepositoryJson : IRepository
     {
@@ -49,7 +51,7 @@ namespace lab1.Models.Repositories
             return project == null ? Option<Project>.None : Option<Project>.Some(project);
         }
 
-        public List<Project> GetAllProjects(int offset, int limit)
+        public List<Project> GetProjectsPage(int offset, int limit)
         {
             List<Project> projects = _getAllProjects();
 
@@ -117,19 +119,16 @@ namespace lab1.Models.Repositories
 
         private List<User> _getAllUsers()
         {
-
             string usersJsonString = File.ReadAllText(_usersDataFile);
-            List<User> users = JsonSerializer.Deserialize<List<User>>(usersJsonString);
 
-            return users;
+            return JsonSerializer.Deserialize<List<User>>(usersJsonString);
         }
 
         private List<Project> _getAllProjects()
         {
             string projectsJsonString = File.ReadAllText(_projectsDataFile);
-            List<Project> projects = JsonSerializer.Deserialize<List<Project>>(projectsJsonString);
 
-            return projects;
+            return JsonSerializer.Deserialize<List<Project>>(projectsJsonString);
         }
 
         private static void _initializeRepo()

@@ -23,9 +23,9 @@ namespace lab1.Controllers
             return _repo.GetProject(projectName).Match<IActionResult>(Ok, NotFound);
         }
 
-        public IActionResult GetAllProjects(int offset=0, int limit=100)
+        public IActionResult GetProjectsPage(int offset=0, int limit=100)
         {
-            return Ok(_repo.GetAllProjects(offset, limit));
+            return Ok(_repo.GetProjectsPage(offset, limit));
         }
 
         [HttpPost]
