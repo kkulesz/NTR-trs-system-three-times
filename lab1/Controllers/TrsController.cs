@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using lab1.Models;
+
+using lab1.Models.Repositories;
+using lab1.Models.DomainModel;
 
 namespace lab1.Controllers
 {

@@ -1,8 +1,10 @@
-using LanguageExt;
 using System.Collections.Generic;
+using LanguageExt;
+
+using lab1.Models.DomainModel;
 
 
-namespace lab1.Models
+namespace lab1.Models.Repositories
 {
     public abstract class Repository
     {

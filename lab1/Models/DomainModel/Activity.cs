@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace lab1.Models
+namespace lab1.Models.DomainModel
 {
     public class Activity
     {
