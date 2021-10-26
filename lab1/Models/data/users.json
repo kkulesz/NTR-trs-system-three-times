@@ -1,1 +1,14 @@
-[{"Login":"konrad2"}]
+[
+  {
+    "Login": "konrad2"
+  },
+  {
+    "Login": "konrad3"
+  },
+  {
+    "Login": "konrad1"
+  },
+  {
+    "Login": "konrad4"
+  }
+]

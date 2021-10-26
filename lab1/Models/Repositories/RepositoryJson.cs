@@ -8,6 +8,10 @@ using lab1.Models.DomainModel;
 
 namespace lab1.Models.Repositories
 {
+    /**
+    TODO:
+    1. Think about C#'s Option methods, if its not that convinient to use then simply define own exceptions and handle them
+    */
     public class RepositoryJson : IRepository
     {
         public RepositoryJson()
@@ -18,43 +22,85 @@ namespace lab1.Models.Repositories
         public Option<User> GetUser(string login)
         {
             List<User> users = _getAllUsers();
-            User user = users.Find(u => u.Login == login);
-            if (user == null)// c# does not have pretty Option initializer i think :(
-            {
-                return Option<User>.None;
-            }
-            else
-            {
-                return Option<User>.Some(user);
-            }
+            User user = users.Find(u => _userLoginPredicate(u, login));
+
+            return user == null ? Option<User>.None : Option<User>.Some(user);
         }
 
         public Option<User> CreateUser(User user)
         {
             List<User> users = _getAllUsers();
-            if (users.Exists(u => u.Login == user.Login))
+            if (users.Exists(u => _userLoginPredicate(u, user.Login)))
             {
                 return Option<User>.None;
             }
-            else
-            {
-                users.Add(user);
-                string usersJson = JsonSerializer.Serialize(users);
-                File.WriteAllText(_usersDataFile, usersJson);
+            users.Add(user);
+            string usersJson = _serializeJson(users);
+            File.WriteAllText(_usersDataFile, usersJson);
 
-                return Option<User>.Some(user);
-            }
+            return Option<User>.Some(user);
         }
 
-        public Option<Project> GetProject(string name)
+        public Option<Project> GetProject(string projectName)
         {
-            //todo
-            return Option<Project>.Some(new Project("", ""));
+            List<Project> projects = _getAllProjects();
+            Project project = projects.Find(p => _projectNamePredicate(p, projectName));
+
+            return project == null ? Option<Project>.None : Option<Project>.Some(project);
+        }
+
+        public List<Project> GetAllProjects(int offset, int limit)
+        {
+            List<Project> projects = _getAllProjects();
+
+            int length = projects.Length();
+            int realOffset = Math.Min(offset, length);
+            int realLimit = Math.Min(length - realOffset, limit);
+
+            return projects.GetRange(realOffset, realLimit);
         }
         public Option<Project> CreateProject(Project project)
         {
-            //todo
-            return Option<Project>.Some(new Project("", ""));
+            List<Project> projects = _getAllProjects();
+            if (projects.Exists(p => _projectNamePredicate(p, project.Name)))
+            {
+                return Option<Project>.None;
+            }
+
+
+            Option<User> ownerOpt = GetUser(project.Owner);
+            if (ownerOpt.IsNone)
+            {
+                return Option<Project>.None;
+            }
+
+            projects.Add(project);
+            string projectsJson = _serializeJson(projects);
+            File.WriteAllText(_projectsDataFile, projectsJson);
+
+            return Option<Project>.Some(project);
+        }
+
+        public Option<Project> UpdateProject(Project project)
+        {
+            List<Project> projects = _getAllProjects();
+            if (!projects.Exists(p => _projectNamePredicate(p, project.Name)))
+            {
+                return Option<Project>.None;
+            }
+
+            Option<User> ownerOpt = GetUser(project.Owner);
+            if (ownerOpt.IsNone)
+            {
+                return Option<Project>.None;
+            }
+
+            projects.RemoveAll(p => _projectNamePredicate(p, project.Name));
+            projects.Add(project);
+            string projectsJson = _serializeJson(projects);
+            File.WriteAllText(_projectsDataFile, projectsJson);
+
+            return Option<Project>.Some(project);
         }
 
         public List<Activity> GetActivitiesForUser(string userLogin)
@@ -78,6 +124,14 @@ namespace lab1.Models.Repositories
             return users;
         }
 
+        private List<Project> _getAllProjects()
+        {
+            string projectsJsonString = File.ReadAllText(_projectsDataFile);
+            List<Project> projects = JsonSerializer.Deserialize<List<Project>>(projectsJsonString);
+
+            return projects;
+        }
+
         private static void _initializeRepo()
         {
             if (!Directory.Exists(_dataDirectory))
@@ -87,13 +141,36 @@ namespace lab1.Models.Repositories
             if (!File.Exists(_usersDataFile))
             {
                 List<User> emptyUsersList = new List<User>();
-                string emptyUsersListJson = JsonSerializer.Serialize(emptyUsersList);
+                string emptyUsersListJson = _serializeJson(emptyUsersList);
                 File.WriteAllText(_usersDataFile, emptyUsersListJson);
             }
+            if (!File.Exists(_projectsDataFile))
+            {
+                List<Project> emptyProjectsList = new List<Project>();
+                string emptyProjectsListJson = _serializeJson(emptyProjectsList);
+                File.WriteAllText(_projectsDataFile, emptyProjectsListJson);
+            }
         }
+
+        private bool _userLoginPredicate(User u, string login)
+        {
+            return u.Login == login;
+        }
+
+        private bool _projectNamePredicate(Project p, string projectName)
+        {
+            return p.Name == projectName;
+        }
+
+        private static string _serializeJson<T>(T obj)
+        {
+            return JsonSerializer.Serialize(obj, _jsonOptions);
+        }
+        private static JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { WriteIndented = true };
 
 
         private static string _dataDirectory = Path.Combine(Environment.CurrentDirectory, "Models", "data");
         private static string _usersDataFile = Path.Combine(_dataDirectory, "users.json");
+        private static string _projectsDataFile = Path.Combine(_dataDirectory, "projects.json");
     }
 }

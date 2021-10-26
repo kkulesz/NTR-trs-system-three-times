@@ -7,19 +7,37 @@ namespace lab1.Controllers
 {
     public class TrsController : Controller
     {
-
-        public TrsController()
-        { }
-
         public IActionResult GetUser(string login)
         {
             return _repo.GetUser(login).Match<IActionResult>(Ok, NotFound);
         }
 
         [HttpPost]
-        public IActionResult CreateUser([FromBody]User user)
+        public IActionResult CreateUser([FromBody] User user)
         {
             return _repo.CreateUser(user).Match<IActionResult>(Ok, Conflict);
+        }
+
+        public IActionResult GetProject(string projectName)
+        {
+            return _repo.GetProject(projectName).Match<IActionResult>(Ok, NotFound);
+        }
+
+        public IActionResult GetAllProjects(int offset=0, int limit=100)
+        {
+            return Ok(_repo.GetAllProjects(offset, limit));
+        }
+
+        [HttpPost]
+        public IActionResult CreateProject([FromBody] Project project)
+        {
+            return _repo.CreateProject(project).Match<IActionResult>(Ok, Conflict);
+        }
+
+        [HttpPut]
+        public IActionResult UpdateProject([FromBody] Project project)
+        {
+            return _repo.UpdateProject(project).Match<IActionResult>(Ok, NotFound);
         }
 
         private IRepository _repo = new RepositoryJson();

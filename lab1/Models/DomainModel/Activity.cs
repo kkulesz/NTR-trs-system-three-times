@@ -9,7 +9,7 @@ namespace lab1.Models.DomainModel
         public string ProjectName { get; }
         public string ExecutorName { get; }
         public int Budget { get; set; }
-        public Boolean IsActive { get; set; }
+        public bool IsActive { get; set; }
         public DateTime Date { get; set; }
         public List<string> Subactivities { get; set; } //todo: maybe remove setter and add 'addSubactivity()' 
 
