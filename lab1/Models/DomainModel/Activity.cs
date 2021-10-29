@@ -11,8 +11,9 @@ namespace lab1.Models.DomainModel
         public int Budget { get; }
         public DateTime Date { get; }
         public List<string> Subactivities { get; }
+        public string Description {get;}
 
-        public Activity(string code, string projectName, string executorName, int budget, DateTime date, List<string> subactivities = null)
+        public Activity(string code, string projectName, string executorName, int budget, DateTime date, List<string> subactivities, string description)
         {
             Code = code;
             ProjectName = projectName;
@@ -20,6 +21,7 @@ namespace lab1.Models.DomainModel
             Budget = budget;
             Date = date;
             Subactivities = subactivities ?? new List<string>();
+            Description = description;
         }
     }
 }

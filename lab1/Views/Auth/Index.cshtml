@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "NTR21";
+    Layout = "_MainLayout";
+    @* TODO: tutaj AuthLayout *@
+}
+
+<div class="text-center">
+    <h1 class="display-4">Konrad Kulesza</h1>
+    <p>NTR21Z - TimeReportingSystem</p>
+</div>
+
+<form asp-controller="Auth" asp-action="Login">
+  <div>
+    <label class="form-label">Login</label>
+    <input name="TODO" class="form-control">
+  </div>
+  <button type="submit" class="btn btn-primary">Login</button>
+
+  <br>TODO: tutaj wypisac wszystkich uzytkownikow jacy są
+</form>
+
+<br>
+<br>
+<br>
+
+<form asp-controller="Auth" asp-action="Register">
+  <div>
+    <label class="form-label">Register</label>
+    <input name="TODO" class="form-control">
+  </div>
+  <button type="submit" class="btn btn-primary">Register</button>
+</form>
