@@ -51,16 +51,11 @@ namespace lab1.Models.Repositories
             return project == null ? Option<Project>.None : Option<Project>.Some(project);
         }
 
-        public List<Project> GetProjectsPage(int offset, int limit)
+        public List<Project> GetAllProjects()
         {
-            List<Project> projects = _getAllProjects();
-
-            int length = projects.Length();
-            int realOffset = Math.Min(offset, length);
-            int realLimit = Math.Min(length - realOffset, limit);
-
-            return projects.GetRange(realOffset, realLimit);
+            return _getAllProjects();
         }
+
         public Option<Project> CreateProject(Project project)
         {
             List<Project> projects = _getAllProjects();
@@ -103,18 +98,6 @@ namespace lab1.Models.Repositories
             File.WriteAllText(_projectsDataFile, projectsJson);
 
             return Option<Project>.Some(project);
-        }
-
-        public List<Activity> GetActivitiesForUser(string userLogin)
-        {
-            //todo
-            return new List<Activity>();
-        }
-
-        public Option<Activity> CreateActivity(Activity activity)
-        {
-            //todo
-            return Option<Activity>.Some(new Activity("", "", "", 0, true, DateTime.Now));
         }
 
         private List<User> _getAllUsers()

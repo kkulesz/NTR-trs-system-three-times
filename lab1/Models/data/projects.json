@@ -1,17 +1,11 @@
 [
   {
-    "Name": "sprz\u0105tanie",
-    "Owner": "konrad2",
-    "IsActive": false
-  },
-  {
-    "Name": "p2",
-    "Owner": "konrad2",
-    "IsActive": true
-  },
-  {
-    "Name": "p1",
-    "Owner": "konrad2",
-    "IsActive": false
+    "Name": "p",
+    "Owner": "konrad",
+    "Categories": [
+      "category1"
+    ],
+    "IsActive": true,
+    "Participants": []
   }
 ]
