@@ -1,4 +1,4 @@
-﻿@model List<lab1.Models.DomainModel.User>;
+﻿@model lab1.Models.ViewModel.UsersWithMessage;
 @{
 
   ViewData["Title"] = "NTR21";
@@ -12,6 +12,8 @@
   <p>NTR21Z - TimeReportingSystem</p>
 </div>
 
+<h3 style="margin-bottom: 1rem;">@Model.Message</h3>
+
 <form asp-controller="Auth" asp-action="Login">
   <div>
     <label class="form-label">Login</label>
@@ -19,10 +21,11 @@
   </div>
   <button type="submit" class="btn btn-primary">Login</button>
 </form>
+
 <br>
 <div class="container">
   <div class="row">
-    @foreach (var user in Model)
+    @foreach (var user in Model.Users)
     {
       <div class="col">
         @user.Login
@@ -30,10 +33,6 @@
     }
   </div>
 </div>
-
-
-
-
 
 <br>
 <br>

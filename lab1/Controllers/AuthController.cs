@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using LanguageExt;
-using System;
 
 using lab1.Models.Repositories;
-using lab1.Models.DomainModel;
+using lab1.Models.ViewModel;
 
 using lab1.Controllers.Common;
 
@@ -23,7 +21,7 @@ namespace lab1.Controllers
 
             if (userOpt.IsNone)
             {
-                return _formViewWithUsers();
+                return _formViewWithUsers("Such user does not exist!");
             }
             else
             {
@@ -38,7 +36,7 @@ namespace lab1.Controllers
 
             if (userOpt.IsNone)
             {
-                return _formViewWithUsers();
+                return _formViewWithUsers("Such user already exists!");
             }
             else
             {
@@ -52,8 +50,10 @@ namespace lab1.Controllers
             return View("../Project/DisplayProject", _repo.GetAllProjects());
         }
 
-        private IActionResult _formViewWithUsers(){
-            return View("Index", _repo.GetAllUsers());
+        private IActionResult _formViewWithUsers(string msg = ""){
+            var users =  _repo.GetAllUsers();
+            var usersWithMsg = new UsersWithMessage(users, msg);
+            return View("Index", usersWithMsg);
         }
         private IRepository _repo = new RepositoryJson();
     }
