@@ -2,10 +2,6 @@
   {
     "Name": "p",
     "Owner": "konrad",
-    "Categories": [
-      "category1"
-    ],
-    "IsActive": true,
-    "Participants": []
+    "IsActive": false
   }
 ]

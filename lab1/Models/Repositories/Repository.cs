@@ -9,7 +9,8 @@ namespace lab1.Models.Repositories
     interface IRepository
     {
         Option<User> GetUser(string login);
-        Option<User> CreateUser(User user);
+        List<User> GetAllUsers();
+        Option<User> CreateUser(string login);
         Option<Project> GetProject(string projectName);
         List<Project> GetAllProjects();
         Option<Project> CreateProject(Project project);

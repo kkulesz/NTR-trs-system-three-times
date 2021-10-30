@@ -1,32 +1,48 @@
-﻿@{
-    ViewData["Title"] = "NTR21";
-    Layout = "_MainLayout";
-    @* TODO: tutaj AuthLayout *@
+﻿@model List<lab1.Models.DomainModel.User>;
+@{
+
+  ViewData["Title"] = "NTR21";
+  Layout = "_MainLayout";
+  @* TODO: tutaj AuthLayout *@
 }
 
+
 <div class="text-center">
-    <h1 class="display-4">Konrad Kulesza</h1>
-    <p>NTR21Z - TimeReportingSystem</p>
+  <h1 class="display-4">Konrad Kulesza</h1>
+  <p>NTR21Z - TimeReportingSystem</p>
 </div>
 
 <form asp-controller="Auth" asp-action="Login">
   <div>
     <label class="form-label">Login</label>
-    <input name="TODO" class="form-control">
+    <input name="login" class="form-control">
   </div>
   <button type="submit" class="btn btn-primary">Login</button>
-
-  <br>TODO: tutaj wypisac wszystkich uzytkownikow jacy są
 </form>
+<br>
+<div class="container">
+  <div class="row">
+    @foreach (var user in Model)
+    {
+      <div class="col">
+        @user.Login
+      </div>
+    }
+  </div>
+</div>
+
+
+
+
 
 <br>
 <br>
 <br>
 
-<form asp-controller="Auth" asp-action="Register">
+<form asp-controller="Auth" asp-action="Register" method="POST">
   <div>
     <label class="form-label">Register</label>
-    <input name="TODO" class="form-control">
+    <input name="Login" class="form-control">
   </div>
   <button type="submit" class="btn btn-primary">Register</button>
 </form>

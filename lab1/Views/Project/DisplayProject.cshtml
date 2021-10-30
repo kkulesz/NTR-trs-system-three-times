@@ -1,9 +1,9 @@
 @model List<lab1.Models.DomainModel.Project>;
 
 <div class="text-center">
-    <h1 class="display-4" style="margin-bottom: 2rem;">Aktywności dzisaij</h1>
+    <h1 class="display-4" style="margin-bottom: 2rem;">Projects</h1>
 
-    <h3 style="margin-bottom: 1rem;">Select user or create a new one.</h3>
+    <h3 style="margin-bottom: 1rem;">Projects.</h3>
     <div class="btn-group" style="max-width: 50ch; margin-bottom: 2rem;">
         @foreach (var project in Model)
         {
@@ -11,8 +11,9 @@
         }
     </div>
 
-    <div class="container">
-        <a asp-area="" asp-controller="Home" asp-action="AddUserForm">Click here to add new user</a>
-    </div>
+    <form asp-action="CreateProjectForm">
+        <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">Create new project</button>
+    </form>
+    
 
 </div>

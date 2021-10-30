@@ -23,6 +23,15 @@ namespace lab1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // services.AddDistributedMemoryCache();
+            // services.AddSession(options =>
+            // {
+            //     options.IdleTimeout = TimeSpan.FromMinutes(1);
+            //     options.Cookie.HttpOnly = true;
+            //     options.Cookie.IsEssential = true;
+            // });
+            services.AddMvc().AddSessionStateTempDataProvider();
+            services.AddSession();
             services.AddControllersWithViews();
         }
 
@@ -46,6 +55,8 @@ namespace lab1
 
             app.UseAuthorization();
 
+            app.UseSession();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

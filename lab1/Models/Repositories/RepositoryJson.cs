@@ -29,18 +29,23 @@ namespace lab1.Models.Repositories
             return user == null ? Option<User>.None : Option<User>.Some(user);
         }
 
-        public Option<User> CreateUser(User user)
+        public List<User> GetAllUsers(){
+            return _getAllUsers();
+        }
+
+        public Option<User> CreateUser(string login)
         {
             List<User> users = _getAllUsers();
-            if (users.Exists(u => _userLoginPredicate(u, user.Login)))
+            if (users.Exists(u => _userLoginPredicate(u, login)))
             {
                 return Option<User>.None;
             }
-            users.Add(user);
+            User newUser = new User(login);
+            users.Add(newUser);
             string usersJson = _serializeJson(users);
             File.WriteAllText(_usersDataFile, usersJson);
 
-            return Option<User>.Some(user);
+            return Option<User>.Some(newUser);
         }
 
         public Option<Project> GetProject(string projectName)
