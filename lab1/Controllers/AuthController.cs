@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
@@ -11,49 +12,51 @@ namespace lab1.Controllers
     public class AuthController : Controller
     {
 
-        public IActionResult Index()
+        public IActionResult Index(string msg = "")
         {
-            return _formViewWithUsers();
+            var users = _repo.GetAllUsers();
+            var usersWithMsg = new UsersWithMessage(users, msg);
+            return View("Index", usersWithMsg);
         }
         public IActionResult Login(string login)
         {
             var userOpt = _repo.GetUser(login);
 
-            if (userOpt.IsNone)
-            {
-                return _formViewWithUsers("Such user does not exist!");
-            }
-            else
-            {
-                return _handleSuccess(login);
-            }
+            return userOpt.IsNone ? _indexViewWithMsg("Such user does not exist!") : _handleSuccess(login);
         }
 
         [HttpPost]
         public IActionResult Register(string login)
         {
-            var userOpt = _repo.CreateUser(login);
+            if (login == null)
+                return _indexViewWithMsg("Invalid login!");
 
-            if (userOpt.IsNone)
+            var userOpt = _repo.CreateUser(login);
+            return userOpt.IsNone ? _indexViewWithMsg("Such user already exists!") : _handleSuccess(login);
+        }
+
+        public IActionResult Logout()
+        {
+            if (this.HttpContext.Session.GetString(Constants.SessionKeyName) != null)
             {
-                return _formViewWithUsers("Such user already exists!");
+                this.HttpContext.Session.Remove(Constants.SessionKeyName);
+                return _indexViewWithMsg("Succesful logout");
             }
             else
             {
-                return _handleSuccess(login);
+                return _indexViewWithMsg();
             }
         }
 
         private IActionResult _handleSuccess(string login)
         {
             this.HttpContext.Session.SetString(Constants.SessionKeyName, login);
-            return View("../Project/DisplayProject", _repo.GetAllProjects());
+            return RedirectToAction("DisplayProject", "Project");
         }
 
-        private IActionResult _formViewWithUsers(string msg = ""){
-            var users =  _repo.GetAllUsers();
-            var usersWithMsg = new UsersWithMessage(users, msg);
-            return View("Index", usersWithMsg);
+        private IActionResult _indexViewWithMsg(string msg = "")
+        {
+            return Index(msg);
         }
         private IRepository _repo = new RepositoryJson();
     }
