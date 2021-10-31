@@ -15,9 +15,9 @@ namespace lab1.Models.Repositories
         List<Project> GetAllProjects();
         Project CreateProject(Project project);
         Project UpdateProject(Project project);
-        // Activity GetActivity()
-        // List<Activity> GetActivitiesForUser(string userLogin);
+        Activity GetActivity(string code);
         Activity CreateActivity(Activity activity);
         List<Activity> GetActivitiesForUserForMonth(string executor, int year, int month);
+        void DeleteActivity(string code, string executor);
     }
 }

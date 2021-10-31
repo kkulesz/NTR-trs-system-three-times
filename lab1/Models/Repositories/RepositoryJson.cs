@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.Json;
 using System.Collections.Generic;
 using LanguageExt;
+using System.Linq;
 
 using lab1.Models.DomainModel;
 
@@ -107,6 +108,12 @@ namespace lab1.Models.Repositories
             return project;
         }
 
+        public Activity GetActivity(string code)
+        {
+            var activities = _getAllActivities();
+            return activities.Find(a => a.Code == code);
+        }
+
         public Activity CreateActivity(Activity activity)
         {
             var executor = activity.ExecutorName;
@@ -146,6 +153,35 @@ namespace lab1.Models.Repositories
             return JsonSerializer.Deserialize<List<Activity>>(activitiesJsonString);
         }
 
+        public void DeleteActivity(string code, string executor)
+        {
+            DirectoryInfo dinf = new DirectoryInfo(_activitiesDataDirectory);
+            var allUsersFiles = dinf.GetFiles(executor + "*");
+            foreach (var file in allUsersFiles)
+            {
+                var fileFullName = file.FullName;
+                string activitiesJsonString = File.ReadAllText(fileFullName);
+                var activities = JsonSerializer.Deserialize<List<Activity>>(activitiesJsonString);
+                int removed = activities.RemoveAll(a => a.Code == code);
+                if (removed > 0)
+                {
+                    if (activities.Length() > 0)
+                    {
+                        var jsonWithoutRemoved = _serializeJson(activities);
+                        File.WriteAllText(fileFullName, jsonWithoutRemoved);
+                    }
+                    else
+                    {
+                        File.Delete(fileFullName);
+                    }
+
+                    return;
+                }
+
+            }
+            throw new Exception();
+        }
+
         private List<User> _getAllUsers()
         {
             string usersJsonString = File.ReadAllText(_usersDataFile);
@@ -158,6 +194,26 @@ namespace lab1.Models.Repositories
             string projectsJsonString = File.ReadAllText(_projectsDataFile);
 
             return JsonSerializer.Deserialize<List<Project>>(projectsJsonString);
+        }
+
+        private List<Activity> _getActivitiesForUser(string login)
+        {
+            List<Activity> activites = new List<Activity>();
+            DirectoryInfo dinf = new DirectoryInfo(_activitiesDataDirectory);
+            var allUsersFiles = dinf.GetFiles(login + "*");
+            foreach (var file in allUsersFiles)
+            {
+                string activitiesJsonString = File.ReadAllText(file.FullName);
+                var newActivites = JsonSerializer.Deserialize<List<Activity>>(activitiesJsonString);
+                activites.AddRange(newActivites);
+
+            }
+            return activites;
+        }
+
+        private List<Activity> _getAllActivities()
+        {
+            return _getActivitiesForUser(""); //if empty login is given, then all activities will be listed
         }
 
         private static void _initializeRepo()

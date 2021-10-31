@@ -5,9 +5,9 @@
 
 
     <div class="text-left">
-    <form asp-action="CreateActivityForm">
-        <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">Create new activity</button>
-    </form>
+        <form asp-action="CreateActivityForm">
+            <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">Create new activity</button>
+        </form>
     </div>
 
 
@@ -19,7 +19,18 @@
         @foreach (var activity in Model)
         {
             <button class="btn btn-primary" style="margin: 2px 3px;">@activity.Code</button>
-            <div>TODO: update, delete, read buttons</div>
+            <form asp-action="ShowActivity">
+                <input type="hidden" name="code" value=@activity.Code>
+                <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">Show</button>
+            </form>
+            <form asp-action="DeleteActivity">
+                <input type="hidden" name="code" value=@activity.Code>
+                <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">Delete</button>
+            </form>
+            @* <form asp-action="DeleteActivity">
+                <input type="hidden" name="projectName" value=@activity.Code>
+                <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">Show</button>
+            </form> *@
         }
     </div>
 
