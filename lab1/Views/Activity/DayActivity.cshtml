@@ -27,10 +27,10 @@
                 <input type="hidden" name="code" value=@activity.Code>
                 <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">Delete</button>
             </form>
-            @* <form asp-action="DeleteActivity">
-                <input type="hidden" name="projectName" value=@activity.Code>
-                <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">Show</button>
-            </form> *@
+            <form asp-action="UpdateActivityForm">
+                <input type="hidden" name="code" value=@activity.Code>
+                <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">Update</button>
+            </form>
         }
     </div>
 

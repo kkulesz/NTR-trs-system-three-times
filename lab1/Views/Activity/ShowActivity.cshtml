@@ -1,9 +1,9 @@
 @model lab1.Models.DomainModel.Activity;
 
 <div>
-    <label><@Model.Code</label>
+    <label>@Model.Code</label>
     <br/>
-    <label><@Model.Date</label>
+    <label>@Model.Date.ToString("dd-MM-yyyy")</label>
     <br/>
     <label>@Model.Description</label>
 </div>

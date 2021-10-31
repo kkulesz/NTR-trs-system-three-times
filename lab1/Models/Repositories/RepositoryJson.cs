@@ -141,6 +141,33 @@ namespace lab1.Models.Repositories
             return activity;
         }
 
+        public Activity UpdateActivity(Activity activity)
+        {
+            var executor = activity.ExecutorName;
+            var date = activity.Date;
+            var month = date.Month;
+            var year = date.Year;
+
+            var executorOpt = GetUser(activity.ExecutorName);
+            if (executorOpt.IsNone)
+            {
+                return null;
+            }
+            var activitiesThisMonth = GetActivitiesForUserForMonth(executor, year, month);
+
+            if (!activitiesThisMonth.Exists(a => _activityCodePredicate(a, activity.Code)))
+            {
+                return null;
+            }
+
+            activitiesThisMonth.RemoveAll(a => a.Code == activity.Code);
+            activitiesThisMonth.Add(activity);
+            string activitiesJson = _serializeJson(activitiesThisMonth);
+            var fileName = _prepareActivityFileName(executor, year, month);
+            File.WriteAllText(fileName, activitiesJson);
+            return activity;
+        }
+
         public List<Activity> GetActivitiesForUserForMonth(string executor, int year, int month)
         {
             var fileName = _prepareActivityFileName(executor, year, month);
