@@ -1,7 +1,37 @@
 [
   {
+    "Name": "p2",
+    "Owner": "konrad",
+    "IsActive": false,
+    "Categories": [],
+    "Participants": []
+  },
+  {
+    "Name": "p3",
+    "Owner": "konrad",
+    "IsActive": false,
+    "Categories": [],
+    "Participants": []
+  },
+  {
+    "Name": "p5",
+    "Owner": "konrad",
+    "IsActive": true,
+    "Categories": [],
+    "Participants": []
+  },
+  {
     "Name": "p",
     "Owner": "konrad",
-    "IsActive": false
+    "IsActive": false,
+    "Categories": [],
+    "Participants": []
+  },
+  {
+    "Name": "p4",
+    "Owner": "konrad",
+    "IsActive": false,
+    "Categories": [],
+    "Participants": []
   }
 ]

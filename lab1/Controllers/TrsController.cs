@@ -9,7 +9,8 @@ namespace lab1.Controllers
     {
         public IActionResult GetProject(string projectName)
         {
-            return _repo.GetProject(projectName).Match<IActionResult>(Ok, NotFound);
+            var project = _repo.GetProject(projectName);
+            return project != null ? Ok(project) : NotFound();
         }
 
         public IActionResult GetProjectsPage()
@@ -20,13 +21,15 @@ namespace lab1.Controllers
         [HttpPost]
         public IActionResult CreateProject([FromBody] Project project)
         {
-            return _repo.CreateProject(project).Match<IActionResult>(Ok, Conflict);
+            var newProject = _repo.CreateProject(project);
+            return newProject != null ? Ok(project) : Conflict();
         }
 
         [HttpPut]
         public IActionResult UpdateProject([FromBody] Project project)
         {
-            return _repo.UpdateProject(project).Match<IActionResult>(Ok, NotFound);
+            var updated = _repo.UpdateProject(project);
+            return updated != null ? Ok(project) : NotFound();
         }
 
         private IRepository _repo = new RepositoryJson();

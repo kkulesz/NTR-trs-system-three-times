@@ -29,7 +29,8 @@ namespace lab1.Models.Repositories
             return user == null ? Option<User>.None : Option<User>.Some(user);
         }
 
-        public List<User> GetAllUsers(){
+        public List<User> GetAllUsers()
+        {
             return _getAllUsers();
         }
 
@@ -48,12 +49,13 @@ namespace lab1.Models.Repositories
             return Option<User>.Some(newUser);
         }
 
-        public Option<Project> GetProject(string projectName)
+        public Project GetProject(string projectName)
         {
             List<Project> projects = _getAllProjects();
             Project project = projects.Find(p => _projectNamePredicate(p, projectName));
 
-            return project == null ? Option<Project>.None : Option<Project>.Some(project);
+            // return project == null ? Option<Project>.None : Option<Project>.Some(project);
+            return project;
         }
 
         public List<Project> GetAllProjects()
@@ -61,40 +63,40 @@ namespace lab1.Models.Repositories
             return _getAllProjects();
         }
 
-        public Option<Project> CreateProject(Project project)
+        public Project CreateProject(Project project)
         {
             List<Project> projects = _getAllProjects();
             if (projects.Exists(p => _projectNamePredicate(p, project.Name)))
             {
-                return Option<Project>.None;
+                return null;
             }
 
 
             Option<User> ownerOpt = GetUser(project.Owner);
             if (ownerOpt.IsNone)
             {
-                return Option<Project>.None;
+                return null;
             }
 
             projects.Add(project);
             string projectsJson = _serializeJson(projects);
             File.WriteAllText(_projectsDataFile, projectsJson);
 
-            return Option<Project>.Some(project);
+            return project;
         }
 
-        public Option<Project> UpdateProject(Project project)
+        public Project UpdateProject(Project project)
         {
             List<Project> projects = _getAllProjects();
             if (!projects.Exists(p => _projectNamePredicate(p, project.Name)))
             {
-                return Option<Project>.None;
+                return null;
             }
 
             Option<User> ownerOpt = GetUser(project.Owner);
             if (ownerOpt.IsNone)
             {
-                return Option<Project>.None;
+                return null;
             }
 
             projects.RemoveAll(p => _projectNamePredicate(p, project.Name));
@@ -102,7 +104,46 @@ namespace lab1.Models.Repositories
             string projectsJson = _serializeJson(projects);
             File.WriteAllText(_projectsDataFile, projectsJson);
 
-            return Option<Project>.Some(project);
+            return project;
+        }
+
+        public Activity CreateActivity(Activity activity)
+        {
+            var executor = activity.ExecutorName;
+            var date = activity.Date;
+            var month = date.Month;
+            var year = date.Year;
+
+            var executorOpt = GetUser(activity.ExecutorName);
+            if (executorOpt.IsNone)
+            {
+                return null;
+            }
+            var activitiesThisMonth = GetActivitiesForUserForMonth(executor, year, month);
+
+            if (activitiesThisMonth.Exists(a => _activityCodePredicate(a, activity.Code)))
+            {
+                return null;
+            }
+
+            activitiesThisMonth.Add(activity);
+            string activitiesJson = _serializeJson(activitiesThisMonth);
+            var fileName = _prepareActivityFileName(executor, year, month);
+            File.WriteAllText(fileName, activitiesJson);
+
+            return activity;
+        }
+
+        public List<Activity> GetActivitiesForUserForMonth(string executor, int year, int month)
+        {
+            var fileName = _prepareActivityFileName(executor, year, month);
+            if (!File.Exists(fileName))
+            {
+                return new List<Activity>();
+            }
+            string activitiesJsonString = File.ReadAllText(fileName);
+
+            return JsonSerializer.Deserialize<List<Activity>>(activitiesJsonString);
         }
 
         private List<User> _getAllUsers()
@@ -137,6 +178,10 @@ namespace lab1.Models.Repositories
                 string emptyProjectsListJson = _serializeJson(emptyProjectsList);
                 File.WriteAllText(_projectsDataFile, emptyProjectsListJson);
             }
+            if (!Directory.Exists(_activitiesDataDirectory))
+            {
+                Directory.CreateDirectory(_activitiesDataDirectory);
+            }
         }
 
         private bool _userLoginPredicate(User u, string login)
@@ -149,6 +194,17 @@ namespace lab1.Models.Repositories
             return p.Name == projectName;
         }
 
+        private bool _activityCodePredicate(Activity a, string activityCode)
+        {
+            return a.Code == activityCode;
+        }
+
+        private string _prepareActivityFileName(string executor, int year, int month)
+        {
+            var fileName = executor + "-" + year.ToString() + "-" + month.ToString() + ".json";
+            return Path.Combine(_activitiesDataDirectory, fileName);
+        }
+
         private static string _serializeJson<T>(T obj)
         {
             return JsonSerializer.Serialize(obj, _jsonOptions);
@@ -159,5 +215,6 @@ namespace lab1.Models.Repositories
         private static string _dataDirectory = Path.Combine(Environment.CurrentDirectory, "Models", "data");
         private static string _usersDataFile = Path.Combine(_dataDirectory, "users.json");
         private static string _projectsDataFile = Path.Combine(_dataDirectory, "projects.json");
+        private static string _activitiesDataDirectory = Path.Combine(_dataDirectory, "activities");
     }
 }

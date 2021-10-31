@@ -11,11 +11,13 @@ namespace lab1.Models.Repositories
         Option<User> GetUser(string login);
         List<User> GetAllUsers();
         Option<User> CreateUser(string login);
-        Option<Project> GetProject(string projectName);
+        Project GetProject(string projectName);
         List<Project> GetAllProjects();
-        Option<Project> CreateProject(Project project);
-        Option<Project> UpdateProject(Project project);
+        Project CreateProject(Project project);
+        Project UpdateProject(Project project);
+        // Activity GetActivity()
         // List<Activity> GetActivitiesForUser(string userLogin);
-        // Option<Activity> CreateActivity(Activity activity);
+        Activity CreateActivity(Activity activity);
+        List<Activity> GetActivitiesForUserForMonth(string executor, int year, int month);
     }
 }

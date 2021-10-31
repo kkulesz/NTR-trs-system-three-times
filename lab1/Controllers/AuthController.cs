@@ -14,6 +14,10 @@ namespace lab1.Controllers
 
         public IActionResult Index(string msg = "")
         {
+            var login = this.HttpContext.Session.GetString(Constants.SessionKeyName);
+            if(login != null){
+                return _handleSuccess(login);
+            }
             var users = _repo.GetAllUsers();
             var usersWithMsg = new UsersWithMessage(users, msg);
             return View("Index", usersWithMsg);
@@ -46,6 +50,11 @@ namespace lab1.Controllers
             {
                 return _indexViewWithMsg();
             }
+        }
+
+        public IActionResult NotLoggedIn()
+        {
+            return _indexViewWithMsg("You are not logged in, please do it :)");
         }
 
         private IActionResult _handleSuccess(string login)

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using System;
 using System.IO;
 using lab1.Models.Repositories;
@@ -11,13 +12,8 @@ namespace lab1.Controllers
 {
     public class ProjectController : Controller
     {
-        public IActionResult DisplayProject(string projectName)
+        public IActionResult DisplayProject()
         {
-            Console.WriteLine(this.HttpContext.Session.GetString(Constants.SessionKeyName));
-            if (this.HttpContext.Session.GetString(Constants.SessionKeyName) != null)
-            {
-                Console.WriteLine($"login = {this.HttpContext.Session.GetString(Constants.SessionKeyName)}");
-            }
             return View(_repo.GetAllProjects());
         }
 
@@ -27,10 +23,27 @@ namespace lab1.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateProject(Project newProject)
+        public IActionResult CreateProject(string projectName, bool isActive, List<string> categories)
         {
+            string owner = this.HttpContext.Session.GetString(Constants.SessionKeyName);
+            if (owner == null)
+                return RedirectToAction("NotLoggedIn", "Auth");
+
+            var newProject = new Project(projectName, owner, isActive, categories);
             _repo.CreateProject(newProject);
-            return View("../Activity/DayActivity");
+            return RedirectToAction("DisplayProject");
+        }
+
+        public IActionResult MarkProjectNotActive(string projectName)
+        {
+            string owner = this.HttpContext.Session.GetString(Constants.SessionKeyName);
+            if (owner == null)
+                return RedirectToAction("NotLoggedIn", "Auth");
+
+            var inactive = _repo.GetProject(projectName).Inactive();
+            _repo.UpdateProject(inactive);
+
+            return RedirectToAction("DisplayProject");
         }
         private IRepository _repo = new RepositoryJson();
     }

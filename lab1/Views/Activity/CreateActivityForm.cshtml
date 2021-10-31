@@ -1,0 +1,31 @@
+<form asp-action="CreateActivity">
+    <div>
+        <label>Activity code</label>
+        <input name="code" class="form-control">
+    </div>
+    <div>
+        <label>Project name</label>
+        <input name="projectName" class="form-control">
+    </div>
+    <div>
+        <label>Executor</label>
+        <input name="executorName" class="form-control">
+    </div>
+    <div>
+        <label>Budget</label>
+        <input name="budget" class="form-control">
+    </div>
+    <div class="input-group date" data-provide="datepicker">
+        <label>Date</label>
+        <input type="text" class="form-control" name="date">
+        <div class="input-group-addon">
+            <span class="glyphicon glyphicon-th"></span>
+        </div>
+    </div>
+    <div>
+        <label>Description</label>
+        <input name="description" class="form-control">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
