@@ -5,6 +5,7 @@ using System;
 
 using lab1.Models.Repositories;
 using lab1.Models.DomainModel;
+using lab1.Models.ViewModel;
 
 using lab1.Controllers.Common;
 
@@ -12,9 +13,16 @@ namespace lab1.Controllers
 {
     public class ActivityController : Controller
     {
-        public IActionResult DayActivity()
+        public IActionResult DayActivity(Nullable<DateTime> date)
         {
-            return View(_repo.GetActivitiesForUserForMonth("konrad", 2021, 10));
+            string executor = this.HttpContext.Session.GetString(Constants.SessionKeyName);
+            if (executor == null)
+                return RedirectToAction("NotLoggedIn", "Auth");
+            
+            var fetchDate = date ?? DateTime.Today;
+            var activities = _repo.GetActivitiesForUserForMonth(executor, fetchDate.Year, fetchDate.Month);
+            var activitiesWithDate = new ActivitiesWithDate(activities, fetchDate);
+            return View(activitiesWithDate);
         }
 
         public IActionResult CreateActivityForm()
@@ -63,14 +71,15 @@ namespace lab1.Controllers
             return View(_repo.GetActivity(code));
         }
 
-        public IActionResult UpdateActivity(string code, string projectName, string executorName, int budget, DateTime date,List<String> subactivities, string description)
+        public IActionResult UpdateActivity(string code, string projectName, string executorName, int budget, DateTime date, List<String> subactivities, string description)
         {
             var updated = new Activity(code, projectName, executorName, budget, date, subactivities, description);
             var result = _repo.UpdateActivity(updated);
-            if(result == null)
+            if (result == null)
                 return RedirectToAction("DayActivity"); //TODO handle error
             return RedirectToAction("DayActivity");
         }
+
         private IRepository _repo = new RepositoryJson();
     }
 }
