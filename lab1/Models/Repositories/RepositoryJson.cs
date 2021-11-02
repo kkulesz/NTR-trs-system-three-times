@@ -9,12 +9,6 @@ using lab1.Models.DomainModel;
 
 namespace lab1.Models.Repositories
 {
-    /**
-    TODO:
-    1. Think about C#'s Option methods, if its not that convinient to use then simply define own exceptions and handle them
-    2. enclode GetAll* methods' results into pagination, Page class needed
-    3. CRU for activities
-    */
     public class RepositoryJson : IRepository
     {
         public RepositoryJson()
@@ -25,7 +19,7 @@ namespace lab1.Models.Repositories
         public Option<User> GetUser(string login)
         {
             List<User> users = _getAllUsers();
-            User user = users.Find(u => _userLoginPredicate(u, login));
+            User user = users.Find(u => _stringEqualPredicate(u.Login, login));
 
             return user == null ? Option<User>.None : Option<User>.Some(user);
         }
@@ -38,10 +32,9 @@ namespace lab1.Models.Repositories
         public Option<User> CreateUser(string login)
         {
             List<User> users = _getAllUsers();
-            if (users.Exists(u => _userLoginPredicate(u, login)))
-            {
+            if (users.Exists(u => _stringEqualPredicate(u.Login, login)))
                 return Option<User>.None;
-            }
+
             User newUser = new User(login);
             users.Add(newUser);
             string usersJson = _serializeJson(users);
@@ -53,7 +46,7 @@ namespace lab1.Models.Repositories
         public Project GetProject(string projectName)
         {
             List<Project> projects = _getAllProjects();
-            Project project = projects.Find(p => _projectNamePredicate(p, projectName));
+            Project project = projects.Find(p => _stringEqualPredicate(p.Name, projectName));
 
             // return project == null ? Option<Project>.None : Option<Project>.Some(project);
             return project;
@@ -67,17 +60,12 @@ namespace lab1.Models.Repositories
         public Project CreateProject(Project project)
         {
             List<Project> projects = _getAllProjects();
-            if (projects.Exists(p => _projectNamePredicate(p, project.Name)))
-            {
+            if (projects.Exists(p => _stringEqualPredicate(p.Name, project.Name)))
                 return null;
-            }
-
 
             Option<User> ownerOpt = GetUser(project.Owner);
             if (ownerOpt.IsNone)
-            {
                 return null;
-            }
 
             projects.Add(project);
             string projectsJson = _serializeJson(projects);
@@ -89,18 +77,14 @@ namespace lab1.Models.Repositories
         public Project UpdateProject(Project project)
         {
             List<Project> projects = _getAllProjects();
-            if (!projects.Exists(p => _projectNamePredicate(p, project.Name)))
-            {
+            if (!projects.Exists(p => _stringEqualPredicate(p.Name, project.Name)))
                 return null;
-            }
 
             Option<User> ownerOpt = GetUser(project.Owner);
             if (ownerOpt.IsNone)
-            {
                 return null;
-            }
 
-            projects.RemoveAll(p => _projectNamePredicate(p, project.Name));
+            projects.RemoveAll(p => _stringEqualPredicate(p.Name, project.Name));
             projects.Add(project);
             string projectsJson = _serializeJson(projects);
             File.WriteAllText(_projectsDataFile, projectsJson);
@@ -123,15 +107,12 @@ namespace lab1.Models.Repositories
 
             var executorOpt = GetUser(activity.ExecutorName);
             if (executorOpt.IsNone)
-            {
                 return null;
-            }
+
             var activitiesThisMonth = GetActivitiesForUserForMonth(executor, year, month);
 
-            if (activitiesThisMonth.Exists(a => _activityCodePredicate(a, activity.Code)))
-            {
+            if (activitiesThisMonth.Exists(a => _stringEqualPredicate(a.Code, activity.Code)))
                 return null;
-            }
 
             activitiesThisMonth.Add(activity);
             string activitiesJson = _serializeJson(activitiesThisMonth);
@@ -150,15 +131,12 @@ namespace lab1.Models.Repositories
 
             var executorOpt = GetUser(activity.ExecutorName);
             if (executorOpt.IsNone)
-            {
                 return null;
-            }
+
             var activitiesThisMonth = GetActivitiesForUserForMonth(executor, year, month);
 
-            if (!activitiesThisMonth.Exists(a => _activityCodePredicate(a, activity.Code)))
-            {
+            if (!activitiesThisMonth.Exists(a => _stringEqualPredicate(a.Code, activity.Code)))
                 return null;
-            }
 
             activitiesThisMonth.RemoveAll(a => a.Code == activity.Code);
             activitiesThisMonth.Add(activity);
@@ -172,9 +150,8 @@ namespace lab1.Models.Repositories
         {
             var fileName = _prepareActivityFileName(executor, year, month);
             if (!File.Exists(fileName))
-            {
                 return new List<Activity>();
-            }
+
             string activitiesJsonString = File.ReadAllText(fileName);
 
             return JsonSerializer.Deserialize<List<Activity>>(activitiesJsonString);
@@ -198,9 +175,7 @@ namespace lab1.Models.Repositories
                         File.WriteAllText(fileFullName, jsonWithoutRemoved);
                     }
                     else
-                    {
                         File.Delete(fileFullName);
-                    }
 
                     return;
                 }
@@ -267,19 +242,9 @@ namespace lab1.Models.Repositories
             }
         }
 
-        private bool _userLoginPredicate(User u, string login)
+        private bool _stringEqualPredicate(string first, string second)
         {
-            return u.Login == login;
-        }
-
-        private bool _projectNamePredicate(Project p, string projectName)
-        {
-            return p.Name == projectName;
-        }
-
-        private bool _activityCodePredicate(Activity a, string activityCode)
-        {
-            return a.Code == activityCode;
+            return first == second;
         }
 
         private string _prepareActivityFileName(string executor, int year, int month)
