@@ -60,7 +60,7 @@ namespace lab1.Controllers
         private IActionResult _handleSuccess(string login)
         {
             this.HttpContext.Session.SetString(Constants.SessionKeyName, login);
-            return RedirectToAction("DisplayProject", "Project");
+            return RedirectToAction("ProjectSummaries", "Project");
         }
 
         private IActionResult _indexViewWithMsg(string msg = "")

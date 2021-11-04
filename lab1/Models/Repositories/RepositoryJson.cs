@@ -146,6 +146,11 @@ namespace lab1.Models.Repositories
             return activity;
         }
 
+        public List<Activity> GetAllActivities()
+        {
+            return _getAllActivities();
+        }
+
         public List<Activity> GetActivitiesForUserForMonth(string executor, int year, int month)
         {
             var fileName = _prepareActivityFileName(executor, year, month);

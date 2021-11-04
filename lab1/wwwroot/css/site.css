@@ -76,6 +76,10 @@ table, tr, td {
   border-collapse: collapse;
 }
 
+table {
+  width: 100%;
+}
+
 th, td {
   padding: 3px;
 }

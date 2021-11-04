@@ -1,0 +1,71 @@
+@model List<lab1.Models.ViewModel.ProjectSummary>;
+
+<div class="text-center">
+    <h1 class="display-4" style="margin-bottom: 2rem;">Projects</h1>
+
+
+    <div class="text-left">
+        <form asp-action="CreateProjectForm">
+            <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">Create new project</button>
+        </form>
+    </div>
+
+    <h3 style="margin-bottom: 1rem;">Projects.</h3>
+    <div class="btn-group" style="max-width: 50ch; margin-bottom: 2rem;">
+        @foreach (var project in Model)
+        {
+            <table>
+                <tr>
+                    <td>
+                        @project.ProjectName
+                    </td>
+                    <td>
+                        Declared budget=@project.OwnerDefinedBudget
+                    </td>
+                    <td>
+                        Participants budget=@project.ParticipantsDefinedBudget
+                    </td>
+                    <td>
+                        Summed budget=@(project.OwnerDefinedBudget-project.ParticipantsDefinedBudget)
+                    </td>
+                    <td>
+                        @if (@project.IsActive)
+                        {
+                            <form asp-action="MarkProjectNotActive">
+                                <input type="hidden" name="projectName" value=@project.ProjectName>
+                                <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">Set inactive</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <div> INACTIVE </div>
+                        }
+                    </td>
+                </tr>
+            </table>
+            <div>
+                <table>
+                    <tr>
+                        <td>Executor</td>
+                        <td>Code</td>
+                        <td>Budget</td>
+                        <td>Description</td>
+                    </tr>
+                    @foreach (var activity in project.Activities)
+                    {
+                        <tr>
+                            <td>@activity.ExecutorName</td>
+                            <td>@activity.Code</td>
+                            <td>@activity.Budget</td>
+                            <td>@activity.Description</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <br><br>
+        }
+    </div>
+
+
+
+</div>
