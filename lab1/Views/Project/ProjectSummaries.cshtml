@@ -14,35 +14,32 @@
     <div class="btn-group" style="max-width: 50ch; margin-bottom: 2rem;">
         @foreach (var project in Model)
         {
-            <table>
-                <tr>
-                    <td>
-                        @project.ProjectName
-                    </td>
-                    <td>
-                        Declared budget=@project.OwnerDefinedBudget
-                    </td>
-                    <td>
-                        Participants budget=@project.ParticipantsDefinedBudget
-                    </td>
-                    <td>
-                        Summed budget=@(project.OwnerDefinedBudget-project.ParticipantsDefinedBudget)
-                    </td>
-                    <td>
-                        @if (@project.IsActive)
-                        {
-                            <form asp-action="MarkProjectNotActive">
-                                <input type="hidden" name="projectName" value=@project.ProjectName>
-                                <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">Set inactive</button>
-                            </form>
-                        }
-                        else
-                        {
-                            <div> INACTIVE </div>
-                        }
-                    </td>
-                </tr>
-            </table>
+            <div style="float:left;">
+                @project.ProjectName
+            </div>
+            <div style="float:left;">
+                Declared=@project.OwnerDefinedBudget
+            </div>
+            <div style="float:left;">
+                Participants=@project.ParticipantsDefinedBudget
+            </div>
+            <div style="float:left;">
+                Summed=@(project.OwnerDefinedBudget-project.ParticipantsDefinedBudget)
+            </div>
+            <div>
+                @if (@project.IsActive)
+                {
+                    <form asp-action="MarkProjectNotActive">
+                        <input type="hidden" name="projectName" value=@project.ProjectName>
+                        <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">Set inactive</button>
+                    </form>
+                }
+                else
+                {
+                    <div> INACTIVE </div>
+                }
+            </div>
+
             <div>
                 <table>
                     <tr>
@@ -50,6 +47,7 @@
                         <td>Code</td>
                         <td>Budget</td>
                         <td>Description</td>
+                        <td>change budget</td>
                     </tr>
                     @foreach (var activity in project.Activities)
                     {
@@ -58,6 +56,13 @@
                             <td>@activity.Code</td>
                             <td>@activity.Budget</td>
                             <td>@activity.Description</td>
+                            <td>
+                                @* @if(activity) *@
+                                <form asp-action="UpdateActivityAcceptedBudgetForm">
+                                    <input type="hidden" name="activityCode" value=@activity.Code>
+                                    <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">update activity</button>
+                                </form>
+                            </td>
                         </tr>
                     }
                 </table>

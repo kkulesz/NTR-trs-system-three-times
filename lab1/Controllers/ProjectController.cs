@@ -66,6 +66,26 @@ namespace lab1.Controllers
             return _redirectToProjectView();
         }
 
+        public IActionResult UpdateActivityAcceptedBudgetForm(string activityCode)
+        {
+            string owner = this.HttpContext.Session.GetString(Constants.SessionKeyName);
+            if (owner == null)
+                return _redirectToLogin();
+
+            return View(_repo.GetActivity(activityCode));
+        }
+
+        public IActionResult UpdateActivityAcceptedBudget(string activityCode, int acceptedBudget)
+        {
+            string owner = this.HttpContext.Session.GetString(Constants.SessionKeyName);
+            if (owner == null)
+                return _redirectToLogin();
+            var activity = _repo.GetActivity(activityCode);
+            _repo.UpdateActivity(activity.SetAcceptedBudget(acceptedBudget));
+
+            return _redirectToProjectView();
+        }
+
         private IActionResult _redirectToProjectView()
         {
             return RedirectToAction("ProjectSummaries");

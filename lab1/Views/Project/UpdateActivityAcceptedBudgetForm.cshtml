@@ -1,0 +1,12 @@
+@model lab1.Models.DomainModel.Activity;
+
+<form asp-action="UpdateActivityAcceptedBudget">
+    <div>
+        <label>Accepted budget</label>
+        <input name="acceptedBudget" class="form-control" value=@(Model.AcceptedBudget.ToString())>
+    </div>
+    <div>
+        <input type="hidden" name="activityCode" class="form-control" value=@Model.Code>
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
