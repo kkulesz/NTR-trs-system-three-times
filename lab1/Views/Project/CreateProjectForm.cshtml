@@ -1,4 +1,4 @@
-<form asp-action="CreateProject">
+<form asp-action="CreateProject" style="width: 30%;">
     <div>
         <label>Project name</label>
         <input name="projectName" class="form-control">
@@ -7,6 +7,15 @@
         <label>Is active</label>
         <input value="true" type="checkbox" name="isActive" class="form-control">
     </div>
+    <div>
+        <label>Subcategory #1</label>
+        <input name="subcategory1" class="form-control">
+    </div>
+    <div>
+        <label>Subcategory #2</label>
+        <input name="subcategory2" class="form-control">
+    </div>
+    <br/>
     <button type="submit" class="btn btn-primary">Register</button>
 </form>
 

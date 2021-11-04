@@ -43,12 +43,12 @@ namespace lab1.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateProject(string projectName, bool isActive, List<string> categories)
+        public IActionResult CreateProject(string projectName, bool isActive, string subcategory1, string subcategory2)
         {
             string owner = this.HttpContext.Session.GetString(Constants.SessionKeyName);
             if (owner == null)
                 return _redirectToLogin();
-
+            var categories = new List<string> { subcategory1, subcategory2 }.Filter(c => c != null).ToList();
             var newProject = new Project(projectName, owner, isActive, categories);
             _repo.CreateProject(newProject);
             return _redirectToProjectView();
