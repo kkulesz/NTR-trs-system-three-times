@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Linq;
 
 using lab1.Models.Repositories;
 using lab1.Models.DomainModel;
@@ -13,16 +14,32 @@ namespace lab1.Controllers
 {
     public class ActivityController : Controller
     {
-        public IActionResult DayActivity(Nullable<DateTime> date)
+        public IActionResult MonthSummary(Nullable<DateTime> date)
         {
             string executor = this.HttpContext.Session.GetString(Constants.SessionKeyName);
             if (executor == null)
-                return RedirectToAction("NotLoggedIn", "Auth");
-            
+                return _redirectToLogin();
+
             var fetchDate = date ?? DateTime.Today;
-            var activities = _repo.GetActivitiesForUserForMonth(executor, fetchDate.Year, fetchDate.Month);
-            var activitiesWithDate = new ActivitiesWithDate(activities, fetchDate);
-            return View(activitiesWithDate);
+            var year = fetchDate.Year;
+            var month = fetchDate.Month;
+
+            var activitiesThisMonth = _repo.GetActivitiesForUserForMonth(executor, year, month);
+            var usersMonth = _repo.GetUsersMonth(executor, year, month);
+            var validUsersMonth = usersMonth ?? new UsersMonth(year, month, executor, frozen: false);
+
+            var projectsThisMonth = activitiesThisMonth.ConvertAll(a => a.ProjectName).Distinct();
+            var projectActivitiesList = new List<ProjectActivities>();
+            foreach (var projectName in projectsThisMonth)
+            {
+                var activitiesForThisProject = activitiesThisMonth.Filter(a => a.ProjectName == projectName).ToList();
+                var projectActivities = new ProjectActivities(projectName, activitiesForThisProject);
+                projectActivitiesList.Add(projectActivities);
+            }
+
+            var monthSummary = new MonthSummary(projectActivitiesList, validUsersMonth);
+
+            return View(monthSummary);
         }
 
         public IActionResult CreateActivityForm()
@@ -34,29 +51,29 @@ namespace lab1.Controllers
         {
             var activity = new Activity(code, projectName, executorName, budget, date, subactivities, description);
             _repo.CreateActivity(activity);
-            return RedirectToAction("DayActivity");
+            return _redirectToActivityView();
         }
 
         public IActionResult DeleteActivity(string code)
         {
             string executor = this.HttpContext.Session.GetString(Constants.SessionKeyName);
             if (executor == null)
-                return RedirectToAction("NotLoggedIn", "Auth");
+                return _redirectToLogin();
 
             _repo.DeleteActivity(code, executor);
-            return RedirectToAction("DayActivity");
+            return _redirectToActivityView();
         }
 
         public IActionResult ShowActivity(string code)
         {
             string executor = this.HttpContext.Session.GetString(Constants.SessionKeyName);
             if (executor == null)
-                return RedirectToAction("NotLoggedIn", "Auth");
+                return _redirectToLogin();
 
             var activity = _repo.GetActivity(code);
             if (activity == null)
             {
-                return RedirectToAction("DayActivity");
+                return _redirectToActivityView();
             }
 
             return View(activity);
@@ -66,7 +83,7 @@ namespace lab1.Controllers
         {
             string executor = this.HttpContext.Session.GetString(Constants.SessionKeyName);
             if (executor == null)
-                return RedirectToAction("NotLoggedIn", "Auth");
+                return _redirectToLogin();
 
             return View(_repo.GetActivity(code));
         }
@@ -76,8 +93,30 @@ namespace lab1.Controllers
             var updated = new Activity(code, projectName, executorName, budget, date, subactivities, description);
             var result = _repo.UpdateActivity(updated);
             if (result == null)
-                return RedirectToAction("DayActivity"); //TODO handle error
-            return RedirectToAction("DayActivity");
+                return _redirectToActivityView(); //TODO handle error
+            return _redirectToActivityView();
+        }
+
+        public IActionResult AcceptMonth(DateTime date)
+        {
+            string executor = this.HttpContext.Session.GetString(Constants.SessionKeyName);
+            if (executor == null)
+                return _redirectToLogin();
+
+            var month = new UsersMonth(date.Year, date.Month, executor, frozen: true);
+            _repo.AcceptMonthForUser(month);
+
+            return _redirectToActivityView();
+        }
+
+        private IActionResult _redirectToActivityView()
+        {
+            return RedirectToAction("MonthSummary");
+        }
+
+        private IActionResult _redirectToLogin()
+        {
+            return RedirectToAction("NotLoggedIn", "Auth");
         }
 
         private IRepository _repo = new RepositoryJson();

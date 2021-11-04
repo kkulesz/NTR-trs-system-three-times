@@ -20,5 +20,7 @@ namespace lab1.Models.Repositories
         Activity UpdateActivity(Activity activity);
         List<Activity> GetActivitiesForUserForMonth(string executor, int year, int month);
         void DeleteActivity(string code, string executor);
+        UsersMonth GetUsersMonth(string executor, int year, int month);
+        UsersMonth AcceptMonthForUser(UsersMonth month);
     }
 }

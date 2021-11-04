@@ -184,6 +184,22 @@ namespace lab1.Models.Repositories
             throw new Exception();
         }
 
+        public UsersMonth GetUsersMonth(string executor, int year, int month)
+        {
+            var months = _getAllUsersMonths();
+            return months.Find(m => m.Year == year && m.Month == month && m.UsersLogin == executor);
+        }
+
+        public UsersMonth AcceptMonthForUser(UsersMonth month)
+        {
+            List<UsersMonth> months = _getAllUsersMonths();
+            months.Add(month);
+            string monthsJson = _serializeJson(months);
+            File.WriteAllText(_monthsDataFile, monthsJson);
+
+            return month;
+        }
+
         private List<User> _getAllUsers()
         {
             string usersJsonString = File.ReadAllText(_usersDataFile);
@@ -218,6 +234,13 @@ namespace lab1.Models.Repositories
             return _getActivitiesForUser(""); //if empty login is given, then all activities will be listed
         }
 
+        private List<UsersMonth> _getAllUsersMonths()
+        {
+            string projectsJsonString = File.ReadAllText(_monthsDataFile);
+
+            return JsonSerializer.Deserialize<List<UsersMonth>>(projectsJsonString);
+        }
+
         private static void _initializeRepo()
         {
             if (!Directory.Exists(_dataDirectory))
@@ -239,6 +262,12 @@ namespace lab1.Models.Repositories
             if (!Directory.Exists(_activitiesDataDirectory))
             {
                 Directory.CreateDirectory(_activitiesDataDirectory);
+            }
+            if (!File.Exists(_monthsDataFile))
+            {
+                List<UsersMonth> emptyMonthsList = new List<UsersMonth>();
+                string emptyMonthsListJson = _serializeJson(emptyMonthsList);
+                File.WriteAllText(_monthsDataFile, emptyMonthsListJson);
             }
         }
 
@@ -264,5 +293,6 @@ namespace lab1.Models.Repositories
         private static string _usersDataFile = Path.Combine(_dataDirectory, "users.json");
         private static string _projectsDataFile = Path.Combine(_dataDirectory, "projects.json");
         private static string _activitiesDataDirectory = Path.Combine(_dataDirectory, "activities");
+        private static string _monthsDataFile = Path.Combine(_dataDirectory, "months.json");
     }
 }
