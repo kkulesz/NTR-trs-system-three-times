@@ -49,9 +49,12 @@ namespace lab1.Controllers
             return View(activeProjectNames);
         }
 
-        public IActionResult CreateActivity(string code, string projectName, string executorName, int budget, DateTime date, List<String> subactivities, string description)
+        public IActionResult CreateActivity(string code, string projectName, int budget, DateTime date, List<String> subactivities, string description)
         {
-            var activity = new Activity(code, projectName, executorName, budget, date, subactivities, description);
+            string executor = this.HttpContext.Session.GetString(Constants.SessionKeyName);
+            if (executor == null)
+                return _redirectToLogin();
+            var activity = new Activity(code, projectName, executor, budget, date, subactivities, description);
             _repo.CreateActivity(activity);
             return _redirectToActivityView();
         }

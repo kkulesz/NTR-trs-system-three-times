@@ -7,16 +7,13 @@
     </div>
     <div>
         <br />
-        <label for="projects">Project:</label>
-        <select name="projects">
+        <label for="projectName">Project:</label>
+        <select name="projectName">
             @foreach (var projectName in @Model)
             {
                 <option value=@projectName>@projectName</option>
             }
         </select>
-    </div>
-    <div>
-        <input type="hidden" name="executorName" class="form-control">
     </div>
     <div>
         <label>Budget</label>
