@@ -44,7 +44,9 @@ namespace lab1.Controllers
 
         public IActionResult CreateActivityForm()
         {
-            return View();
+            var projects = _repo.GetAllProjects();
+            var activeProjectNames = projects.Filter(p => p.IsActive).ToList().ConvertAll(p => p.Name);
+            return View(activeProjectNames);
         }
 
         public IActionResult CreateActivity(string code, string projectName, string executorName, int budget, DateTime date, List<String> subactivities, string description)

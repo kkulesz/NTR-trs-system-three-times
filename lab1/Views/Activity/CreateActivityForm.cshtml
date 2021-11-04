@@ -1,15 +1,22 @@
-<form asp-action="CreateActivity">
+@model List<string>;
+
+<form asp-action="CreateActivity" style="width: 30%;">
     <div>
         <label>Activity code</label>
         <input name="code" class="form-control">
     </div>
     <div>
-        <label>Project name</label>
-        <input name="projectName" class="form-control">
+        <br />
+        <label for="projects">Project:</label>
+        <select name="projects">
+            @foreach (var projectName in @Model)
+            {
+                <option value=@projectName>@projectName</option>
+            }
+        </select>
     </div>
     <div>
-        <label>Executor</label>
-        <input name="executorName" class="form-control">
+        <input type="hidden" name="executorName" class="form-control">
     </div>
     <div>
         <label>Budget</label>
@@ -26,6 +33,6 @@
         <label>Description</label>
         <input name="description" class="form-control">
     </div>
-
+    <br>
     <button type="submit" class="btn btn-primary">Create</button>
 </form>
