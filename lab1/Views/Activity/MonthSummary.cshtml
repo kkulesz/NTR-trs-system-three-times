@@ -66,6 +66,7 @@
                 <tr>
                     <td>Activity code</td>
                     <td>Budget</td>
+                    <td>Accepted budget</td>
                     <td>Description</td>
                     <td>Date</td>
                     <td>Show</td>
@@ -83,6 +84,9 @@
                         </td>
                         <td>
                             @activity.Budget
+                        </td>
+                        <td>
+                            @(activity.AcceptedBudget.HasValue ? activity.AcceptedBudget.ToString() : "---")
                         </td>
                         <td>
                             @activity.Description
