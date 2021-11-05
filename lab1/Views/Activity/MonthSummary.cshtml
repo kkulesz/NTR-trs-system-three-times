@@ -72,11 +72,9 @@
                     <td>Description</td>
                     <td>Date</td>
                     <td>Show</td>
-                    @if (!@Model.Month.Frozen)
-                    {
-                        <td>Delete</td>
-                        <td>Update</td>
-                    }
+                    <td>Delete</td>
+                    <td>Update</td>
+
                 </tr>
                 @foreach (var activity in projectActivities.Activities)
                 {
@@ -118,6 +116,9 @@
                                     <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">Update</button>
                                 </form>
                             </td>
+                        }else{
+                            <td>---</td>
+                            <td>---</td>
                         }
                     </tr>
                 }
