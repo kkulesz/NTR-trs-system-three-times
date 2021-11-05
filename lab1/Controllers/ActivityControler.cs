@@ -54,7 +54,7 @@ namespace lab1.Controllers
             string executor = this.HttpContext.Session.GetString(Constants.SessionKeyName);
             if (executor == null)
                 return _redirectToLogin();
-            var activity = new Activity(code, projectName, executor, budget, acceptedBudget: null, date, subactivities, description);
+            var activity = new Activity(code, projectName, executor, budget, acceptedBudget: null, date, subactivities, description, isActive: true);
             _repo.CreateActivity(activity);
             return _redirectToActivityView();
         }
@@ -93,9 +93,9 @@ namespace lab1.Controllers
             return View(_repo.GetActivity(code));
         }
 
-        public IActionResult UpdateActivity(string code, string projectName, string executorName, int budget, int acceptedBudget, DateTime date, List<String> subactivities, string description)
+        public IActionResult UpdateActivity(string code, string projectName, string executorName, int budget, int acceptedBudget, DateTime date, List<String> subactivities, string description, bool isActive)
         {
-            var updated = new Activity(code, projectName, executorName, budget, acceptedBudget, date, subactivities, description);
+            var updated = new Activity(code, projectName, executorName, budget, acceptedBudget, date, subactivities, description, isActive);
             var result = _repo.UpdateActivity(updated);
             if (result == null)
                 return _redirectToActivityView(); //TODO handle error
@@ -109,7 +109,15 @@ namespace lab1.Controllers
                 return _redirectToLogin();
 
             var month = new UsersMonth(date.Year, date.Month, executor, frozen: true);
+            var activitiesThisMonth = _repo.GetAllActivities()
+                    .Filter(a => a.Date.Month == date.Month && a.Date.Year == date.Year)
+                    .ToList()
+                    .ConvertAll(a => a.SetInactive());
             _repo.AcceptMonthForUser(month);
+            foreach (var act in activitiesThisMonth)
+            {
+                _repo.UpdateActivity(act);
+            }
 
             return _redirectToActivityView();
         }

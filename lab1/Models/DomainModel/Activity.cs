@@ -13,8 +13,9 @@ namespace lab1.Models.DomainModel
         public DateTime Date { get; }
         public List<string> Subactivities { get; }
         public string Description { get; }
+        public bool IsActive { get; }
 
-        public Activity(string code, string projectName, string executorName, int budget, Nullable<int> acceptedBudget,  DateTime date, List<string> subactivities, string description)
+        public Activity(string code, string projectName, string executorName, int budget, Nullable<int> acceptedBudget, DateTime date, List<string> subactivities, string description, bool isActive)
         {
             Code = code;
             ProjectName = projectName;
@@ -24,9 +25,10 @@ namespace lab1.Models.DomainModel
             Date = date;
             Subactivities = subactivities ?? new List<string>();
             Description = description;
+            IsActive = isActive;
         }
 
-        private Activity(Activity acc, int acceptedBudget)
+        private Activity(Activity acc, Nullable<int> acceptedBudget, bool isActive)
         {
             Code = acc.Code;
             ProjectName = acc.ProjectName;
@@ -36,11 +38,17 @@ namespace lab1.Models.DomainModel
             Date = acc.Date;
             Subactivities = acc.Subactivities;
             Description = acc.Description;
+            IsActive = isActive;
         }
 
         public Activity SetAcceptedBudget(int acceptedBudget)
         {
-            return new Activity(this, acceptedBudget);
+            return new Activity(this, acceptedBudget, this.IsActive);
+        }
+
+        public Activity SetInactive()
+        {
+            return new Activity(this, this.AcceptedBudget, false);
         }
     }
 }
