@@ -29,7 +29,7 @@
             <div>
                 @if (@project.IsActive)
                 {
-                    <form asp-action="MarkProjectNotActive">
+                    <form asp-action="MarkProjectNotActive" class="form-inline">
                         <input type="hidden" name="projectName" value=@project.ProjectName>
                         <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">Set inactive</button>
                     </form>
