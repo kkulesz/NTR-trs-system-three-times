@@ -1,8 +1,8 @@
 [
   {
     "Name": "NTR",
-    "Owner": "konrad",
-    "Budget": 200,
+    "Owner": "owner",
+    "Budget": 30,
     "IsActive": true,
     "Categories": [],
     "Participants": []

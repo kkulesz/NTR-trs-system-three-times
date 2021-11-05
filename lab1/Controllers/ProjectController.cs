@@ -39,10 +39,12 @@ namespace lab1.Controllers
             string owner = this.HttpContext.Session.GetString(Constants.SessionKeyName);
             if (owner == null)
                 return _redirectToLogin();
+            var year = date.Year;
+            var month = date.Month;
 
             var ownerProjects = _repo.GetAllProjectsForOwner(owner);
-            var allActivitiesThisMonth = _repo.GetAllActivities().Filter(a => a.Date.Month == date.Month && a.Date.Year == date.Year).ToList();
-            var usersMonth = _repo.GetUsersMonth(owner, date.Year, date.Month);
+            var allActivitiesThisMonth = _repo.GetAllActivities().Filter(a => a.Date.Month == month && a.Date.Year == year).ToList();
+            var usersMonth = _repo.GetUsersMonth(owner, year, month) ?? new UsersMonth(year, month, owner, frozen: false);
 
             var wantedProject = ownerProjects.Find(p => p.Name == projectName);
             if (wantedProject == null)
