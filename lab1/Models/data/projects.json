@@ -1,0 +1,26 @@
+[
+  {
+    "Name": "TEST",
+    "Owner": "konrad",
+    "IsActive": true,
+    "Categories": [],
+    "Participants": []
+  },
+  {
+    "Name": "NTR",
+    "Owner": "konrad",
+    "IsActive": false,
+    "Categories": [
+      "projekt",
+      "kolokwium"
+    ],
+    "Participants": []
+  },
+  {
+    "Name": "asdasfs",
+    "Owner": "konrad",
+    "IsActive": true,
+    "Categories": [],
+    "Participants": []
+  }
+]
