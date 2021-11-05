@@ -13,6 +13,7 @@ namespace lab1.Models.Repositories
         Option<User> CreateUser(string login);
         Project GetProject(string projectName);
         List<Project> GetAllProjects();
+        List<Project> GetAllProjectsForOwner(string owner);
         Project CreateProject(Project project);
         Project UpdateProject(Project project);
         Activity GetActivity(string code);

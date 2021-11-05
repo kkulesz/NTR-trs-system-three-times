@@ -14,13 +14,13 @@ namespace lab1.Models.DomainModel
         public List<string> Subactivities { get; }
         public string Description { get; }
 
-        public Activity(string code, string projectName, string executorName, int budget, DateTime date, List<string> subactivities, string description)
+        public Activity(string code, string projectName, string executorName, int budget, Nullable<int> acceptedBudget,  DateTime date, List<string> subactivities, string description)
         {
             Code = code;
             ProjectName = projectName;
             ExecutorName = executorName;
             Budget = budget;
-            AcceptedBudget = null;
+            AcceptedBudget = acceptedBudget;
             Date = date;
             Subactivities = subactivities ?? new List<string>();
             Description = description;

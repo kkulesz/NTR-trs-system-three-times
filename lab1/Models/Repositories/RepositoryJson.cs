@@ -57,6 +57,12 @@ namespace lab1.Models.Repositories
             return _getAllProjects();
         }
 
+        public List<Project> GetAllProjectsForOwner(string owner)
+        {
+            var all = _getAllProjects();
+            return all.Filter(p => p.Owner == owner).ToList();
+        }
+
         public Project CreateProject(Project project)
         {
             List<Project> projects = _getAllProjects();

@@ -54,7 +54,7 @@ namespace lab1.Controllers
             string executor = this.HttpContext.Session.GetString(Constants.SessionKeyName);
             if (executor == null)
                 return _redirectToLogin();
-            var activity = new Activity(code, projectName, executor, budget, date, subactivities, description);
+            var activity = new Activity(code, projectName, executor, budget, acceptedBudget: null, date, subactivities, description);
             _repo.CreateActivity(activity);
             return _redirectToActivityView();
         }
@@ -93,9 +93,9 @@ namespace lab1.Controllers
             return View(_repo.GetActivity(code));
         }
 
-        public IActionResult UpdateActivity(string code, string projectName, string executorName, int budget, DateTime date, List<String> subactivities, string description)
+        public IActionResult UpdateActivity(string code, string projectName, string executorName, int budget, int acceptedBudget, DateTime date, List<String> subactivities, string description)
         {
-            var updated = new Activity(code, projectName, executorName, budget, date, subactivities, description);
+            var updated = new Activity(code, projectName, executorName, budget, acceptedBudget, date, subactivities, description);
             var result = _repo.UpdateActivity(updated);
             if (result == null)
                 return _redirectToActivityView(); //TODO handle error

@@ -21,20 +21,46 @@ namespace lab1.Controllers
             if (owner == null)
                 return _redirectToLogin();
 
-            var allProjects = _repo.GetAllProjects();
-            var ownerProjects = allProjects.Filter(p => p.Owner == owner);
-
+            var ownerProjects = _repo.GetAllProjectsForOwner(owner);
             var allActivities = _repo.GetAllActivities();
+
             var projectSummaries = new List<ProjectSummary>();
             foreach (var project in ownerProjects)
             {
-                var thisProjectActivities = allActivities.Filter(a => a.ProjectName == project.Name).ToList();
-                // var participantsBudget = thisProjectActivities.
-                var projectSummary = new ProjectSummary(project.Name, project.IsActive, -1, -1, thisProjectActivities);
+                var projectSummary = _prepareProjectSummary(project, allActivities);
                 projectSummaries.Add(projectSummary);
             }
 
             return View(projectSummaries);
+        }
+
+        public IActionResult ProjectSummaryForMonth(string projectName, DateTime date)
+        {
+            string owner = this.HttpContext.Session.GetString(Constants.SessionKeyName);
+            if (owner == null)
+                return _redirectToLogin();
+
+            var ownerProjects = _repo.GetAllProjectsForOwner(owner);
+            var allActivitiesThisMonth = _repo.GetAllActivities().Filter(a => a.Date.Month == date.Month && a.Date.Year == date.Year).ToList();
+            var usersMonth = _repo.GetUsersMonth(owner, date.Year, date.Month);
+
+            var wantedProject = ownerProjects.Find(p => p.Name == projectName);
+            if (wantedProject == null)
+                return _redirectToProjectView(); //TODO handle this
+
+            var projectSummary = _prepareProjectSummary(wantedProject, allActivitiesThisMonth);
+            var projectSummaryWithMonth = new ProjectSummaryWithMonth(projectSummary, usersMonth);
+            return View(projectSummaryWithMonth);
+        }
+
+        public IActionResult SelectMonthAndProjectName()
+        {
+            string owner = this.HttpContext.Session.GetString(Constants.SessionKeyName);
+            if (owner == null)
+                return _redirectToLogin();
+            var projects = _repo.GetAllProjectsForOwner(owner);
+
+            return View(projects.ConvertAll(p => p.Name));
         }
 
         public IActionResult CreateProjectForm()
@@ -43,14 +69,16 @@ namespace lab1.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateProject(string projectName, bool isActive, string subcategory1, string subcategory2)
+        public IActionResult CreateProject(string projectName, int budget, string subcategory1, string subcategory2)
         {
             string owner = this.HttpContext.Session.GetString(Constants.SessionKeyName);
             if (owner == null)
                 return _redirectToLogin();
+
             var categories = new List<string> { subcategory1, subcategory2 }.Filter(c => c != null).ToList();
-            var newProject = new Project(projectName, owner, isActive, categories);
+            var newProject = new Project(projectName, owner, budget, isActive: true, categories);
             _repo.CreateProject(newProject);
+
             return _redirectToProjectView();
         }
 
@@ -84,6 +112,20 @@ namespace lab1.Controllers
             _repo.UpdateActivity(activity.SetAcceptedBudget(acceptedBudget));
 
             return _redirectToProjectView();
+        }
+
+        private ProjectSummary _prepareProjectSummary(Project project, List<Activity> activities)
+        {
+            var thisProjectActivities = activities.Filter(a => a.ProjectName == project.Name).ToList();
+            var summedParticipantsBudget = thisProjectActivities.ConvertAll(a => _getParticipantBudget(a)).Sum();
+
+            return new ProjectSummary(project.Name, project.IsActive, project.Budget, summedParticipantsBudget, thisProjectActivities);
+        }
+
+        private int _getParticipantBudget(Activity activity)
+        {
+
+            return activity.AcceptedBudget ?? activity.Budget;
         }
 
         private IActionResult _redirectToProjectView()
