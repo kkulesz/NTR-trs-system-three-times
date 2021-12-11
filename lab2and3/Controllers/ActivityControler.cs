@@ -132,6 +132,6 @@ namespace lab2and3.Controllers
             return RedirectToAction("NotLoggedIn", "Auth");
         }
 
-        private IRepository _repo = new RepositoryJson();
+        private IRepository _repo = new RepositoryEf();
     }
 }

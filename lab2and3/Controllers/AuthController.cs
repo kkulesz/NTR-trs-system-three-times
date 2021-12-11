@@ -73,6 +73,6 @@ namespace lab2and3.Controllers
         {
             return Index(msg);
         }
-        private IRepository _repo = new RepositoryJson();
+        private IRepository _repo = new RepositoryEf();
     }
 }
