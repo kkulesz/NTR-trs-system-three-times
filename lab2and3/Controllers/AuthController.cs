@@ -15,7 +15,8 @@ namespace lab2and3.Controllers
         public IActionResult Index(string msg = "")
         {
             var login = this.HttpContext.Session.GetString(Constants.SessionKeyName);
-            if(login != null){
+            if (login != null)
+            {
                 return _handleSuccess(login);
             }
             var users = _repo.GetAllUsers();
@@ -25,8 +26,10 @@ namespace lab2and3.Controllers
         public IActionResult Login(string login)
         {
             var userOpt = _repo.GetUser(login);
-
-            return userOpt.IsNone ? _indexViewWithMsg("Such user does not exist!") : _handleSuccess(login);
+            if (null == userOpt)
+                return _indexViewWithMsg("Such user does not exist!");
+            else
+                return _handleSuccess(login);
         }
 
         [HttpPost]
@@ -36,7 +39,10 @@ namespace lab2and3.Controllers
                 return _indexViewWithMsg("Invalid login!");
 
             var userOpt = _repo.CreateUser(login);
-            return userOpt.IsNone ? _indexViewWithMsg("Such user already exists!") : _handleSuccess(login);
+            if (userOpt == null)
+                return _indexViewWithMsg("Such user already exists!");
+            else
+                return _handleSuccess(login);
         }
 
         public IActionResult Logout()

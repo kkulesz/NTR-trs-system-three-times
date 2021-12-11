@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using LanguageExt;
 
 using lab2and3.Models.DomainModel;
 
@@ -8,9 +7,9 @@ namespace lab2and3.Models.Repositories
 {
     interface IRepository
     {
-        Option<User> GetUser(string login);
+        User GetUser(string login);
         List<User> GetAllUsers();
-        Option<User> CreateUser(string login);
+        User CreateUser(string login);
         Project GetProject(string projectName);
         List<Project> GetAllProjects();
         List<Project> GetAllProjectsForOwner(string owner);

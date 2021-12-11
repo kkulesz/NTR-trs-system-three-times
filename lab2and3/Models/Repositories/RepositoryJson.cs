@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Text.Json;
 using System.Collections.Generic;
-using LanguageExt;
 using System.Linq;
 
 using lab2and3.Models.DomainModel;
@@ -16,12 +15,12 @@ namespace lab2and3.Models.Repositories
             _initializeRepo();
         }
 
-        public Option<User> GetUser(string login)
+        public User GetUser(string login)
         {
             List<User> users = _getAllUsers();
             User user = users.Find(u => _stringEqualPredicate(u.Login, login));
 
-            return user == null ? Option<User>.None : Option<User>.Some(user);
+            return user;
         }
 
         public List<User> GetAllUsers()
@@ -29,18 +28,18 @@ namespace lab2and3.Models.Repositories
             return _getAllUsers();
         }
 
-        public Option<User> CreateUser(string login)
+        public User CreateUser(string login)
         {
             List<User> users = _getAllUsers();
             if (users.Exists(u => _stringEqualPredicate(u.Login, login)))
-                return Option<User>.None;
+                return null;
 
             User newUser = new User(login);
             users.Add(newUser);
             string usersJson = _serializeJson(users);
             File.WriteAllText(_usersDataFile, usersJson);
 
-            return Option<User>.Some(newUser);
+            return newUser;
         }
 
         public Project GetProject(string projectName)
@@ -69,8 +68,8 @@ namespace lab2and3.Models.Repositories
             if (projects.Exists(p => _stringEqualPredicate(p.Name, project.Name)))
                 return null;
 
-            Option<User> ownerOpt = GetUser(project.Owner);
-            if (ownerOpt.IsNone)
+            User ownerOpt = GetUser(project.Owner);
+            if (null == ownerOpt)
                 return null;
 
             projects.Add(project);
@@ -86,8 +85,8 @@ namespace lab2and3.Models.Repositories
             if (!projects.Exists(p => _stringEqualPredicate(p.Name, project.Name)))
                 return null;
 
-            Option<User> ownerOpt = GetUser(project.Owner);
-            if (ownerOpt.IsNone)
+            User ownerOpt = GetUser(project.Owner);
+            if (null == ownerOpt)
                 return null;
 
             projects.RemoveAll(p => _stringEqualPredicate(p.Name, project.Name));
@@ -112,7 +111,7 @@ namespace lab2and3.Models.Repositories
             var year = date.Year;
 
             var executorOpt = GetUser(activity.ExecutorName);
-            if (executorOpt.IsNone)
+            if (null == executorOpt)
                 return null;
 
             var activitiesThisMonth = GetActivitiesForUserForMonth(executor, year, month);
@@ -136,7 +135,7 @@ namespace lab2and3.Models.Repositories
             var year = date.Year;
 
             var executorOpt = GetUser(activity.ExecutorName);
-            if (executorOpt.IsNone)
+            if (null == executorOpt)
                 return null;
 
             var activitiesThisMonth = GetActivitiesForUserForMonth(executor, year, month);
