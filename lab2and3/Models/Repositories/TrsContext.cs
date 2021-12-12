@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace lab2and3.Models.Repositories
 {
-    public class TrsContext : DbContext//, IRepository
+    public class TrsContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
