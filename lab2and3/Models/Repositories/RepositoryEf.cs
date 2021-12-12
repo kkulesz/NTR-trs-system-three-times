@@ -93,7 +93,18 @@ namespace lab2and3.Models.Repositories
         }
 
         public Project UpdateProject(Project project)
-        { return null; }
+        {
+            using (var ctx = new TrsContext())
+            {
+                _ensureDatabaseCreated(ctx);
+                var existing = ctx.Projects.Filter(p => p.Name == project.Name).Single();
+                existing.Budget = project.Budget;
+                existing.IsActive = project.IsActive;
+                existing.Users = project.Users;
+                ctx.SaveChanges();
+                return existing;
+            }
+        }
 
         public Activity GetActivity(string code)
         {
@@ -117,7 +128,20 @@ namespace lab2and3.Models.Repositories
         }
 
         public Activity UpdateActivity(Activity activity)
-        { return null; }
+        {
+            using (var ctx = new TrsContext())
+            {
+                _ensureDatabaseCreated(ctx);
+                var existing = ctx.Activities.Filter(ac => ac.Code == activity.Code).Single();
+                existing.AcceptedBudget = activity.AcceptedBudget;
+                existing.IsActive = activity.IsActive;
+                existing.Budget = activity.Budget;
+                existing.Description = activity.Description;
+                existing.Date = activity.Date;
+                ctx.SaveChanges();
+                return existing;
+            }
+        }
 
         public List<Activity> GetAllActivities()
         {
@@ -144,7 +168,15 @@ namespace lab2and3.Models.Repositories
         }
 
         public void DeleteActivity(string code, string executor)
-        { }
+        {
+            using (var ctx = new TrsContext())
+            {
+                _ensureDatabaseCreated(ctx);
+                var existing = ctx.Activities.Filter(ac => ac.Code == code && ac.Executor == executor).Single();
+                ctx.Activities.Remove(existing);
+                ctx.SaveChanges();
+            }
+        }
 
         public UsersMonth GetUsersMonth(string executor, int year, int month)
         {
@@ -161,7 +193,15 @@ namespace lab2and3.Models.Repositories
         }
 
         public UsersMonth AcceptMonthForUser(UsersMonth month)
-        { return null; }
+        {
+            using (var ctx = new TrsContext())
+            {
+                _ensureDatabaseCreated(ctx);
+                ctx.UsersMonths.Add(month);
+                ctx.SaveChanges();
+                return month;
+            }
+        }
 
         private void _ensureDatabaseCreated(TrsContext ctx)
         {

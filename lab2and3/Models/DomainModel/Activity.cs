@@ -11,12 +11,12 @@ namespace lab2and3.Models.DomainModel
         public string Code { get; init; }
         public string Project { get; init; }
         public string Executor { get; init; }
-        public int Budget { get; init; }
-        public Nullable<int> AcceptedBudget { get; init; }
-        public DateTime Date { get; init; }
+        public int Budget { get; set; }
+        public Nullable<int> AcceptedBudget { get; set; }
+        public DateTime Date { get; set; }
         // public List<string> Subactivities { get; init; }
-        public string Description { get; init; }
-        public bool IsActive { get; init; }
+        public string Description { get; set; }
+        public bool IsActive { get; set; }
 
         public Activity() { }
 

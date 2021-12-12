@@ -8,10 +8,10 @@ namespace lab2and3.Models.DomainModel
         public Guid ProjectId { get; init; }
         public string Name { get; init; }
         public string Owner { get; init; }
-        public int Budget { get; init; }
-        public bool IsActive { get; init; }
+        public int Budget { get; set; }
+        public bool IsActive { get; set; }
         // public List<string> Categories { get; init; }
-        public virtual ICollection<User> Users { get; init; }
+        public virtual ICollection<User> Users { get; set; }
 
         public Project Inactive()
         {
