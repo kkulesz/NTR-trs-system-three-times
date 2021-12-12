@@ -9,8 +9,8 @@ using lab2and3.Models.Repositories;
 namespace lab2and3.Migrations
 {
     [DbContext(typeof(TrsContext))]
-    [Migration("20211212160156_InitialWithIds")]
-    partial class InitialWithIds
+    [Migration("20211212164750_InitialWithGuidIds")]
+    partial class InitialWithGuidIds
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

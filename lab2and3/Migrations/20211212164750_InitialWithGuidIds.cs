@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace lab2and3.Migrations
 {
-    public partial class InitialWithIds : Migration
+    public partial class InitialWithGuidIds : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
