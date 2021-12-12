@@ -25,7 +25,7 @@ namespace lab2and3.Models.Repositories
             using (var ctx = new TrsContext())
             {
                 _ensureDatabaseCreated(ctx);
-                var users = from us in ctx.Users select us;
+                var users = ctx.Users;
                 return users.ToList();
             }
         }
@@ -66,7 +66,7 @@ namespace lab2and3.Models.Repositories
             using (var ctx = new TrsContext())
             {
                 _ensureDatabaseCreated(ctx);
-                var users = from pr in ctx.Projects select pr;
+                var users = ctx.Projects;
                 return users.ToList();
             }
         }
@@ -148,7 +148,7 @@ namespace lab2and3.Models.Repositories
             using (var ctx = new TrsContext())
             {
                 _ensureDatabaseCreated(ctx);
-                var activities = from ac in ctx.Activities select ac;
+                var activities = ctx.Activities;
                 return activities.ToList();
             }
         }

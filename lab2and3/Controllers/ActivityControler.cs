@@ -108,11 +108,11 @@ namespace lab2and3.Controllers
             string executor = this.HttpContext.Session.GetString(Constants.SessionKeyName);
             if (executor == null)
                 return _redirectToLogin();
-
-            return View(_repo.GetActivity(code));
+            var activity = _repo.GetActivity(code);
+            return View(activity);
         }
 
-        public IActionResult UpdateActivity(string code, string projectName, string executorName, int budget, int acceptedBudget, DateTime date, List<String> subactivities, string description, bool isActive)
+        public IActionResult UpdateActivity(string code, string projectName, string executorName, int budget, int acceptedBudget, DateTime date, List<String> subactivities, string description)
         {
             var updated = new Activity
             {
@@ -125,7 +125,7 @@ namespace lab2and3.Controllers
                 Date = date,
                 // Subactivities = subactivities,
                 Description = description,
-                IsActive = isActive
+                IsActive = true
             };
             var result = _repo.UpdateActivity(updated);
             if (result == null)
