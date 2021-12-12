@@ -80,7 +80,7 @@
                 {
                     <tr>
                         <td>
-                            @activity.Code
+                            @activity.ActivityId
                         </td>
                         <td>
                             @activity.Budget
@@ -96,7 +96,7 @@
                         </td>
                         <td>
                             <form asp-action="ShowActivity">
-                                <input type="hidden" name="code" value=@activity.Code>
+                                <input type="hidden" name="code" value=@activity.ActivityId>
                                 <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">Show</button>
                             </form>
                         </td>
@@ -106,13 +106,13 @@
 
                             <td>
                                 <form asp-action="DeleteActivity">
-                                    <input type="hidden" name="code" value=@activity.Code>
+                                    <input type="hidden" name="code" value=@activity.ActivityId>
                                     <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">Delete</button>
                                 </form>
                             </td>
                             <td>
                                 <form asp-action="UpdateActivityForm">
-                                    <input type="hidden" name="code" value=@activity.Code>
+                                    <input type="hidden" name="code" value=@activity.ActivityId>
                                     <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">Update</button>
                                 </form>
                             </td>

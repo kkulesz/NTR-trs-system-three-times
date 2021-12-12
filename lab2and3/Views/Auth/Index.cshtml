@@ -20,9 +20,9 @@
     {
       <form asp-controller="Auth" asp-action="Login" class="form-inline">
         <div>
-          <input type="hidden" name="login" class="form-control" value=@user.Login>
+          <input type="hidden" name="login" class="form-control" value=@user.UserId>
         </div>
-        <button type="submit" class="btn btn-primary" style="margin: 10px;">@user.Login</button>
+        <button type="submit" class="btn btn-primary" style="margin: 10px;">@user.UserId</button>
       </form>
     }
   </div>

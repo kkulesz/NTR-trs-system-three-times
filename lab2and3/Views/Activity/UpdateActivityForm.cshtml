@@ -2,16 +2,16 @@
 
 <form asp-action="UpdateActivity" style="width: 30%;">
     <div>
-        <input type="hidden" name="code" class="form-control" value=@Model.Code>
+        <input type="hidden" name="code" class="form-control" value=@Model.ActivityId>
     </div>
     <div>
-        <input type="hidden" name="projectName" class="form-control" value=@Model.ProjectName>
+        <input type="hidden" name="projectName" class="form-control" value=@Model.Project.ProjectId>
     </div>
     <div>
         <input type="hidden" name="acceptedBudget" class="form-control" value=@Model.AcceptedBudget>
     </div>
     <div>
-        <input type="hidden" name="executorName" class="form-control" value=@Model.ExecutorName>
+        <input type="hidden" name="executorName" class="form-control" value=@Model.Project.ProjectId>
     </div>
     <div>
         <input type="hidden" name="isActive" class="form-control" value=@Model.IsActive>

@@ -44,9 +44,16 @@ namespace lab2and3.Controllers
 
             var ownerProjects = _repo.GetAllProjectsForOwner(owner);
             var allActivitiesThisMonth = _repo.GetAllActivities().Filter(a => a.Date.Month == month && a.Date.Year == year).ToList();
-            var usersMonth = _repo.GetUsersMonth(owner, year, month) ?? new UsersMonth(year, month, owner, frozen: false);
+            var usersMonth = _repo.GetUsersMonth(owner, year, month) ?? new UsersMonth
+            {
+                Year = year,
+                Month = month,
+                User = new User(owner),
+                Frozen = false
+            };
 
-            var wantedProject = ownerProjects.Find(p => p.Name == projectName);
+
+            var wantedProject = ownerProjects.Find(p => p.ProjectId == projectName);
             if (wantedProject == null)
                 return _redirectToProjectView(); //TODO handle this
 
@@ -62,7 +69,7 @@ namespace lab2and3.Controllers
                 return _redirectToLogin();
             var projects = _repo.GetAllProjectsForOwner(owner);
 
-            return View(projects.ConvertAll(p => p.Name));
+            return View(projects.ConvertAll(p => p.ProjectId));
         }
 
         public IActionResult CreateProjectForm()
@@ -78,7 +85,15 @@ namespace lab2and3.Controllers
                 return _redirectToLogin();
 
             var categories = new List<string> { subcategory1, subcategory2 }.Filter(c => c != null).ToList();
-            var newProject = new Project(projectName, owner, budget, isActive: true, categories);
+            var newProject = new Project
+            {
+                ProjectId = projectName,
+                User = new User(owner),
+                Budget = budget,
+                IsActive = true,
+                Categories = categories,
+                Users = new List<User>()
+            };
             _repo.CreateProject(newProject);
 
             return _redirectToProjectView();
@@ -111,17 +126,17 @@ namespace lab2and3.Controllers
             if (owner == null)
                 return _redirectToLogin();
             var activity = _repo.GetActivity(activityCode);
-            _repo.UpdateActivity(activity.SetAcceptedBudget(acceptedBudget));
+            _repo.UpdateActivity(activity.AcceptBudget(acceptedBudget));
 
             return _redirectToProjectView();
         }
 
         private ProjectSummary _prepareProjectSummary(Project project, List<Activity> activities)
         {
-            var thisProjectActivities = activities.Filter(a => a.ProjectName == project.Name).ToList();
+            var thisProjectActivities = activities.Filter(a => a.Project.ProjectId == project.ProjectId).ToList();
             var summedParticipantsBudget = thisProjectActivities.ConvertAll(a => _getParticipantBudget(a)).Sum();
 
-            return new ProjectSummary(project.Name, project.IsActive, project.Budget, summedParticipantsBudget, thisProjectActivities);
+            return new ProjectSummary(project.ProjectId, project.IsActive, project.Budget, summedParticipantsBudget, thisProjectActivities);
         }
 
         private int _getParticipantBudget(Activity activity)

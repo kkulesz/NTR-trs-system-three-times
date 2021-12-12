@@ -3,20 +3,12 @@ using System;
 
 namespace lab2and3.Models.DomainModel
 {
-    public class UsersMonth
+    public record UsersMonth
     {
-        public int Year { get; }
-        public int Month { get; }
-        public string UsersLogin { get; }
-        public bool Frozen { get; }
-
-        public UsersMonth(int year, int month, string usersLogin, bool frozen)
-        {
-            Year = year;
-            Month = month;
-            UsersLogin = usersLogin;
-            Frozen = frozen;
-        }
+        public int Year { get; init; }
+        public int Month { get; init; }
+        public virtual User User { get; init; }
+        public bool Frozen { get; init; }
 
         public DateTime NextMonth()
         {

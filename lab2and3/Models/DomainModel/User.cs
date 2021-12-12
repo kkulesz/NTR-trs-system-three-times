@@ -1,12 +1,12 @@
 namespace lab2and3.Models.DomainModel
 {
-    public class User
+    public record User
     {
-        public string Login { get; }
+        public string UserId { get; init;}
 
         public User(string login)
         {
-            Login = login;
+            UserId = login;
         }
     }
 }

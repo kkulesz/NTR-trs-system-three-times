@@ -26,13 +26,19 @@ namespace lab2and3.Controllers
 
             var activitiesThisMonth = _repo.GetActivitiesForUserForMonth(executor, year, month);
             var usersMonth = _repo.GetUsersMonth(executor, year, month);
-            var validUsersMonth = usersMonth ?? new UsersMonth(year, month, executor, frozen: false);
+            var validUsersMonth = usersMonth ?? new UsersMonth
+            {
+                Year = year,
+                Month = month,
+                User = new User(executor),
+                Frozen = false
+            };
 
-            var projectsThisMonth = activitiesThisMonth.ConvertAll(a => a.ProjectName).Distinct();
+            var projectsThisMonth = activitiesThisMonth.ConvertAll(a => a.Project.ProjectId).Distinct();
             var projectActivitiesList = new List<ProjectActivities>();
             foreach (var projectName in projectsThisMonth)
             {
-                var activitiesForThisProject = activitiesThisMonth.Filter(a => a.ProjectName == projectName).ToList();
+                var activitiesForThisProject = activitiesThisMonth.Filter(a => a.Project.ProjectId == projectName).ToList();
                 var projectActivities = new ProjectActivities(projectName, activitiesForThisProject);
                 projectActivitiesList.Add(projectActivities);
             }
@@ -45,7 +51,7 @@ namespace lab2and3.Controllers
         public IActionResult CreateActivityForm()
         {
             var projects = _repo.GetAllProjects();
-            var activeProjectNames = projects.Filter(p => p.IsActive).ToList().ConvertAll(p => p.Name);
+            var activeProjectNames = projects.Filter(p => p.IsActive).ToList().ConvertAll(p => p.ProjectId);
             return View(activeProjectNames);
         }
 
@@ -54,7 +60,19 @@ namespace lab2and3.Controllers
             string executor = this.HttpContext.Session.GetString(Constants.SessionKeyName);
             if (executor == null)
                 return _redirectToLogin();
-            var activity = new Activity(code, projectName, executor, budget, acceptedBudget: null, date, subactivities, description, isActive: true);
+            var project = new Project();//TODO get from repo
+            var activity = new Activity
+            {
+                ActivityId = code,
+                Project = project,
+                User = new User(executor),
+                Budget = budget,
+                AcceptedBudget = null,
+                Date = date,
+                Subactivities = subactivities,
+                Description = description,
+                IsActive = true
+            };
             _repo.CreateActivity(activity);
             return _redirectToActivityView();
         }
@@ -95,7 +113,19 @@ namespace lab2and3.Controllers
 
         public IActionResult UpdateActivity(string code, string projectName, string executorName, int budget, int acceptedBudget, DateTime date, List<String> subactivities, string description, bool isActive)
         {
-            var updated = new Activity(code, projectName, executorName, budget, acceptedBudget, date, subactivities, description, isActive);
+            var project = new Project();//TODO get from repo
+            var updated = new Activity
+            {
+                ActivityId = code,
+                Project = project,
+                User = new User(executorName),
+                Budget = budget,
+                AcceptedBudget = acceptedBudget,
+                Date = date,
+                Subactivities = subactivities,
+                Description = description,
+                IsActive = isActive
+            };
             var result = _repo.UpdateActivity(updated);
             if (result == null)
                 return _redirectToActivityView(); //TODO handle error
@@ -108,11 +138,18 @@ namespace lab2and3.Controllers
             if (executor == null)
                 return _redirectToLogin();
 
-            var month = new UsersMonth(date.Year, date.Month, executor, frozen: true);
+            var month = new UsersMonth
+            {
+                Year = date.Year,
+                Month = date.Month,
+                User = new User(executor),
+                Frozen = true
+            };
+
             var activitiesThisMonth = _repo.GetAllActivities()
                     .Filter(a => a.Date.Month == date.Month && a.Date.Year == date.Year)
                     .ToList()
-                    .ConvertAll(a => a.SetInactive());
+                    .ConvertAll(a => a.Inactive());
             _repo.AcceptMonthForUser(month);
             foreach (var act in activitiesThisMonth)
             {
