@@ -9,8 +9,8 @@ using lab2and3.Models.Repositories;
 namespace lab2and3.Migrations
 {
     [DbContext(typeof(TrsContext))]
-    [Migration("20211212130449_initial-with-all-tables")]
-    partial class initialwithalltables
+    [Migration("20211212160156_InitialWithIds")]
+    partial class InitialWithIds
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,8 +21,9 @@ namespace lab2and3.Migrations
 
             modelBuilder.Entity("lab2and3.Models.DomainModel.Activity", b =>
                 {
-                    b.Property<string>("ActivityId")
-                        .HasColumnType("varchar(767)");
+                    b.Property<byte[]>("ActivityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varbinary(16)");
 
                     b.Property<int?>("AcceptedBudget")
                         .HasColumnType("int");
@@ -30,34 +31,34 @@ namespace lab2and3.Migrations
                     b.Property<int>("Budget")
                         .HasColumnType("int");
 
+                    b.Property<string>("Code")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
+                    b.Property<string>("Executor")
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("ProjectId")
-                        .HasColumnType("varchar(767)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(50)");
+                    b.Property<string>("Project")
+                        .HasColumnType("text");
 
                     b.HasKey("ActivityId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Activities");
                 });
 
             modelBuilder.Entity("lab2and3.Models.DomainModel.Project", b =>
                 {
-                    b.Property<string>("ProjectId")
-                        .HasColumnType("varchar(767)");
+                    b.Property<byte[]>("ProjectId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varbinary(16)");
 
                     b.Property<int>("Budget")
                         .HasColumnType("int");
@@ -65,24 +66,29 @@ namespace lab2and3.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(50)");
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Owner")
+                        .HasColumnType("text");
 
                     b.HasKey("ProjectId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("lab2and3.Models.DomainModel.User", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<byte[]>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varbinary(16)");
+
+                    b.Property<string>("Login")
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<string>("ProjectId")
-                        .HasColumnType("varchar(767)");
+                    b.Property<byte[]>("ProjectId")
+                        .HasColumnType("varbinary(16)");
 
                     b.HasKey("UserId");
 
@@ -93,46 +99,26 @@ namespace lab2and3.Migrations
 
             modelBuilder.Entity("lab2and3.Models.DomainModel.UsersMonth", b =>
                 {
-                    b.Property<string>("UserLogin")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int>("Month")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
+                    b.Property<byte[]>("UsersMonthId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varbinary(16)");
 
                     b.Property<bool>("Frozen")
                         .HasColumnType("tinyint(1)");
 
-                    b.HasKey("UserLogin", "Month", "Year");
+                    b.Property<int>("Month")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserLogin")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("UsersMonthId");
 
                     b.ToTable("UsersMonths");
-                });
-
-            modelBuilder.Entity("lab2and3.Models.DomainModel.Activity", b =>
-                {
-                    b.HasOne("lab2and3.Models.DomainModel.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId");
-
-                    b.HasOne("lab2and3.Models.DomainModel.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Project");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("lab2and3.Models.DomainModel.Project", b =>
-                {
-                    b.HasOne("lab2and3.Models.DomainModel.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("lab2and3.Models.DomainModel.User", b =>

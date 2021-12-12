@@ -19,42 +19,10 @@ namespace lab2and3.Models.Repositories
         {
             base.OnModelCreating(modelBuilder);
 
-            // modelBuilder.Entity<User>(entity =>
-            // {
-            //     entity.HasKey(e => e.UserId);
-            // });
-
-            modelBuilder.Entity<UsersMonth>(entity =>
+            modelBuilder.Entity<Activity>(entity =>
             {
-                entity.HasKey(e => new { e.UserLogin, e.Month, e.Year });
-                // entity.Property(e => e.User).IsRequired();
-                // entity.Property(e => e.Month).IsRequired();
-                // entity.Property(e => e.Year).IsRequired();
-                entity.Property(e => e.Frozen); //todo: IsRequired?
+                entity.HasKey(e => new { e.ActivityId });
             });
-
-            // modelBuilder.Entity<Project>(entity =>
-            // {
-            //     entity.HasKey(e => e.ProjectId);
-            //     entity.Property(e => e.Budget);
-            //     entity.Property(e => e.IsActive);
-            //     entity.Property(e => e.User);
-            //     entity.Property(e => e.Users);
-            //     entity.Property(e => e.Categories);
-            // });
-
-            // modelBuilder.Entity<Activity>(entity =>
-            // {
-            //     entity.HasKey(e => e.ActivityId);
-            //     entity.Property(e => e.AcceptedBudget);
-            //     entity.Property(e => e.Budget).IsRequired();
-            //     entity.Property(e => e.Date).IsRequired();
-            //     entity.Property(e => e.Description);
-            //     entity.Property(e => e.IsActive);
-            //     entity.Property(e => e.Project);
-            //     entity.Property(e => e.Subactivities);
-            //     entity.Property(e => e.User);
-            // });
         }
     }
 }

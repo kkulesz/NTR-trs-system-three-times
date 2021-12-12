@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using lab2and3.Models.DomainModel;
@@ -9,50 +10,162 @@ namespace lab2and3.Models.Repositories
     public class RepositoryEf : IRepository
     {
         public User GetUser(string login)
-        { return null; }
+        {
+            using (var ctx = new TrsContext())
+            {
+                _ensureDatabaseCreated(ctx);
+                // var users = from us in ctx.Users where us.UserId == login select us;
+                var users = ctx.Users.Where(ac => ac.Login == login);
+                return users.Count() != 1 ? null : users.Single();
+            }
+        }
 
         public List<User> GetAllUsers()
-        { return null; }
+        {
+            using (var ctx = new TrsContext())
+            {
+                _ensureDatabaseCreated(ctx);
+                var users = from us in ctx.Users select us;
+                return users.ToList();
+            }
+        }
+
         public User CreateUser(string login)
-        { return null; }
+        {
+
+            using (var ctx = new TrsContext())
+            {
+                try
+                {
+                    _ensureDatabaseCreated(ctx);
+                    var newUser = new User { UserId = Guid.NewGuid(), Login = login };
+                    ctx.Users.Add(newUser);
+                    ctx.SaveChanges();
+                    return newUser;
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+            }
+
+        }
 
         public Project GetProject(string projectName)
-        { return null; }
+        {
+            using (var ctx = new TrsContext())
+            {
+                _ensureDatabaseCreated(ctx);
+                var projects = from pr in ctx.Projects where pr.Name == projectName select pr;
+                return projects.Count() != 1 ? null : projects.Single();
+            }
+        }
 
         public List<Project> GetAllProjects()
-        { return null; }
+        {
+            using (var ctx = new TrsContext())
+            {
+                _ensureDatabaseCreated(ctx);
+                var users = from pr in ctx.Projects select pr;
+                return users.ToList();
+            }
+        }
 
         public List<Project> GetAllProjectsForOwner(string owner)
-        { return null; }
+        {
+            using (var ctx = new TrsContext())
+            {
+                _ensureDatabaseCreated(ctx);
+                var users = from pr in ctx.Projects where pr.Owner == owner select pr;
+                return users.ToList();
+            }
+        }
 
         public Project CreateProject(Project project)
-        { return null; }
+        {
+            using (var ctx = new TrsContext())
+            {
+                _ensureDatabaseCreated(ctx);
+                ctx.Projects.Add(project);
+                ctx.SaveChanges();
+                return project;
+            }
+        }
 
         public Project UpdateProject(Project project)
         { return null; }
 
         public Activity GetActivity(string code)
-        { return null; }
+        {
+            using (var ctx = new TrsContext())
+            {
+                _ensureDatabaseCreated(ctx);
+                var activities = from ac in ctx.Activities where ac.Code == code select ac;
+                return activities.Count() != 1 ? null : activities.Single();
+            }
+        }
 
         public Activity CreateActivity(Activity activity)
-        { return null; }
+        {
+            using (var ctx = new TrsContext())
+            {
+                _ensureDatabaseCreated(ctx);
+                ctx.Activities.Add(activity);
+                ctx.SaveChanges();
+                return activity;
+            }
+        }
 
         public Activity UpdateActivity(Activity activity)
         { return null; }
 
         public List<Activity> GetAllActivities()
-        { return null; }
+        {
+            using (var ctx = new TrsContext())
+            {
+                _ensureDatabaseCreated(ctx);
+                var activities = from ac in ctx.Activities select ac;
+                return activities.ToList();
+            }
+        }
 
         public List<Activity> GetActivitiesForUserForMonth(string executor, int year, int month)
-        { return null; }
+        {
+            using (var ctx = new TrsContext())
+            {
+                _ensureDatabaseCreated(ctx);
+                var activities = ctx.Activities.Where(ac =>
+                    ac.Executor == executor //&&
+                                            // ac.Date.Year == year &&
+                                            // ac.Date.Month == month
+                );
+                return activities.ToList();
+            }
+        }
 
         public void DeleteActivity(string code, string executor)
         { }
 
         public UsersMonth GetUsersMonth(string executor, int year, int month)
-        { return null; }
+        {
+            using (var ctx = new TrsContext())
+            {
+                _ensureDatabaseCreated(ctx);
+                var months = ctx.UsersMonths.Where(mt =>
+                    mt.UserLogin == executor &&
+                    mt.Year == year &&
+                    mt.Month == month
+                );
+                return months.Count() != 1 ? null : months.Single();
+            }
+        }
 
         public UsersMonth AcceptMonthForUser(UsersMonth month)
         { return null; }
+
+        private void _ensureDatabaseCreated(TrsContext ctx)
+        {
+            ctx.Database.EnsureCreated();
+        }
     }
 }

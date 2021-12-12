@@ -46,6 +46,7 @@ namespace lab2and3.Controllers
             var allActivitiesThisMonth = _repo.GetAllActivities().Filter(a => a.Date.Month == month && a.Date.Year == year).ToList();
             var usersMonth = _repo.GetUsersMonth(owner, year, month) ?? new UsersMonth
             {
+                UsersMonthId = Guid.NewGuid(),
                 Year = year,
                 Month = month,
                 UserLogin = owner,
@@ -53,7 +54,7 @@ namespace lab2and3.Controllers
             };
 
 
-            var wantedProject = ownerProjects.Find(p => p.ProjectId == projectName);
+            var wantedProject = ownerProjects.Find(p => p.Name == projectName);
             if (wantedProject == null)
                 return _redirectToProjectView(); //TODO handle this
 
@@ -69,7 +70,7 @@ namespace lab2and3.Controllers
                 return _redirectToLogin();
             var projects = _repo.GetAllProjectsForOwner(owner);
 
-            return View(projects.ConvertAll(p => p.ProjectId));
+            return View(projects.ConvertAll(p => p.Name));
         }
 
         public IActionResult CreateProjectForm()
@@ -87,8 +88,9 @@ namespace lab2and3.Controllers
             var categories = new List<string> { subcategory1, subcategory2 }.Filter(c => c != null).ToList();
             var newProject = new Project
             {
-                ProjectId = projectName,
-                User = new User { UserId = owner },
+                ProjectId = Guid.NewGuid(),
+                Name = projectName,
+                Owner = owner,
                 Budget = budget,
                 IsActive = true,
                 // Categories = categories,
@@ -133,10 +135,10 @@ namespace lab2and3.Controllers
 
         private ProjectSummary _prepareProjectSummary(Project project, List<Activity> activities)
         {
-            var thisProjectActivities = activities.Filter(a => a.Project.ProjectId == project.ProjectId).ToList();
+            var thisProjectActivities = activities.Filter(a => a.Project == project.Name).ToList();
             var summedParticipantsBudget = thisProjectActivities.ConvertAll(a => _getParticipantBudget(a)).Sum();
 
-            return new ProjectSummary(project.ProjectId, project.IsActive, project.Budget, summedParticipantsBudget, thisProjectActivities);
+            return new ProjectSummary(project.Name, project.IsActive, project.Budget, summedParticipantsBudget, thisProjectActivities);
         }
 
         private int _getParticipantBudget(Activity activity)

@@ -7,10 +7,10 @@ namespace lab2and3.Models.DomainModel
 {
     public record Activity
     {
-        [Key]
-        public string ActivityId { get; init; }
-        public virtual Project Project { get; init; }
-        public virtual User User { get; init; }
+        public Guid ActivityId;
+        public string Code { get; init; }
+        public string Project { get; init; }
+        public string Executor { get; init; }
         public int Budget { get; init; }
         public Nullable<int> AcceptedBudget { get; init; }
         public DateTime Date { get; init; }
@@ -23,8 +23,9 @@ namespace lab2and3.Models.DomainModel
         private Activity(Activity acc, Nullable<int> acceptedBudget, bool isActive)
         {
             ActivityId = acc.ActivityId;
+            Code = acc.Code;
             Project = acc.Project;
-            User = acc.User;
+            Executor = acc.Executor;
             Budget = acc.Budget;
             AcceptedBudget = acceptedBudget;
             Date = acc.Date;

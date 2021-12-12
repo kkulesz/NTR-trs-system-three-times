@@ -7,6 +7,7 @@ namespace lab2and3.Models.DomainModel
 {
     public record UsersMonth
     {
+        public Guid UsersMonthId { get; init; }
         public int Year { get; init; }
         public int Month { get; init; }
         [MaxLength(50)]

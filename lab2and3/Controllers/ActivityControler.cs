@@ -28,17 +28,18 @@ namespace lab2and3.Controllers
             var usersMonth = _repo.GetUsersMonth(executor, year, month);
             var validUsersMonth = usersMonth ?? new UsersMonth
             {
+                UsersMonthId = Guid.NewGuid(),
                 Year = year,
                 Month = month,
                 UserLogin = executor,
                 Frozen = false
             };
 
-            var projectsThisMonth = activitiesThisMonth.ConvertAll(a => a.Project.ProjectId).Distinct();
+            var projectsThisMonth = activitiesThisMonth.ConvertAll(a => a.Project).Distinct();
             var projectActivitiesList = new List<ProjectActivities>();
             foreach (var projectName in projectsThisMonth)
             {
-                var activitiesForThisProject = activitiesThisMonth.Filter(a => a.Project.ProjectId == projectName).ToList();
+                var activitiesForThisProject = activitiesThisMonth.Filter(a => a.Project == projectName).ToList();
                 var projectActivities = new ProjectActivities(projectName, activitiesForThisProject);
                 projectActivitiesList.Add(projectActivities);
             }
@@ -51,7 +52,7 @@ namespace lab2and3.Controllers
         public IActionResult CreateActivityForm()
         {
             var projects = _repo.GetAllProjects();
-            var activeProjectNames = projects.Filter(p => p.IsActive).ToList().ConvertAll(p => p.ProjectId);
+            var activeProjectNames = projects.Filter(p => p.IsActive).ToList().ConvertAll(p => p.Name);
             return View(activeProjectNames);
         }
 
@@ -60,12 +61,12 @@ namespace lab2and3.Controllers
             string executor = this.HttpContext.Session.GetString(Constants.SessionKeyName);
             if (executor == null)
                 return _redirectToLogin();
-            var project = new Project();//TODO get from repo
             var activity = new Activity
             {
-                ActivityId = code,
-                Project = project,
-                User = new User { UserId = executor },
+                ActivityId = Guid.NewGuid(),
+                Code = code,
+                Project = projectName,
+                Executor = executor,
                 Budget = budget,
                 AcceptedBudget = null,
                 Date = date,
@@ -113,12 +114,12 @@ namespace lab2and3.Controllers
 
         public IActionResult UpdateActivity(string code, string projectName, string executorName, int budget, int acceptedBudget, DateTime date, List<String> subactivities, string description, bool isActive)
         {
-            var project = new Project();//TODO get from repo
             var updated = new Activity
             {
-                ActivityId = code,
-                Project = project,
-                User = new User { UserId = executorName },
+                ActivityId = Guid.NewGuid(),
+                Code = code,
+                Project = projectName,
+                Executor = executorName,
                 Budget = budget,
                 AcceptedBudget = acceptedBudget,
                 Date = date,
@@ -140,6 +141,7 @@ namespace lab2and3.Controllers
 
             var month = new UsersMonth
             {
+                UsersMonthId = Guid.NewGuid(),
                 Year = date.Year,
                 Month = date.Month,
                 UserLogin = executor,

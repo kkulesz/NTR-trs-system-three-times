@@ -55,8 +55,8 @@
                         @foreach (var activity in project.Activities)
                         {
                             <tr>
-                                <td>@activity.User</td>
-                                <td>@activity.ActivityId</td>
+                                <td>@activity.Executor</td>
+                                <td>@activity.Code</td>
                                 <td>@activity.Budget</td>
                                 <td>@(activity.AcceptedBudget.HasValue ? activity.AcceptedBudget : "---")</td>
                                 <td>@activity.Description</td>
@@ -64,7 +64,7 @@
                                     @if (!@activity.IsActive)
                                     {
                                         <form asp-action="UpdateActivityAcceptedBudgetForm">
-                                            <input type="hidden" name="activityCode" value=@activity.ActivityId>
+                                            <input type="hidden" name="activityCode" value=@activity.Code>
                                             <button type="submit" class="btn btn-primary" style="margin: 2px 3px;">update
                                                 activity</button>
                                         </form>
