@@ -1,17 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace lab2and3.Models.DomainModel
 {
     public record Activity
     {
+        [Key]
         public string ActivityId { get; init; }
         public virtual Project Project { get; init; }
         public virtual User User { get; init; }
         public int Budget { get; init; }
         public Nullable<int> AcceptedBudget { get; init; }
         public DateTime Date { get; init; }
-        public List<string> Subactivities { get; init; }
+        // public List<string> Subactivities { get; init; }
         public string Description { get; init; }
         public bool IsActive { get; init; }
 
@@ -25,7 +28,7 @@ namespace lab2and3.Models.DomainModel
             Budget = acc.Budget;
             AcceptedBudget = acceptedBudget;
             Date = acc.Date;
-            Subactivities = acc.Subactivities;
+            // Subactivities = acc.Subactivities;
             Description = acc.Description;
             IsActive = isActive;
         }

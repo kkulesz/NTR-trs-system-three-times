@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 using System;
 
@@ -7,7 +9,8 @@ namespace lab2and3.Models.DomainModel
     {
         public int Year { get; init; }
         public int Month { get; init; }
-        public virtual User User { get; init; }
+        [MaxLength(50)]
+        public string UserLogin { get; init; }
         public bool Frozen { get; init; }
 
         public DateTime NextMonth()

@@ -8,7 +8,7 @@ namespace lab2and3.Models.DomainModel
         public virtual User User { get; init; }
         public int Budget { get; init; }
         public bool IsActive { get; init; }
-        public List<string> Categories { get; init; }
+        // public List<string> Categories { get; init; }
         public virtual ICollection<User> Users { get; init; }
 
         public Project Inactive()
@@ -19,7 +19,7 @@ namespace lab2and3.Models.DomainModel
                 User = this.User,
                 Budget = this.Budget,
                 IsActive = false,
-                Categories = this.Categories,
+                // Categories = this.Categories,
                 Users = this.Users
             };
         }

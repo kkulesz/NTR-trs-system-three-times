@@ -48,7 +48,7 @@ namespace lab2and3.Controllers
             {
                 Year = year,
                 Month = month,
-                User = new User(owner),
+                UserLogin = owner,
                 Frozen = false
             };
 
@@ -88,10 +88,10 @@ namespace lab2and3.Controllers
             var newProject = new Project
             {
                 ProjectId = projectName,
-                User = new User(owner),
+                User = new User { UserId = owner },
                 Budget = budget,
                 IsActive = true,
-                Categories = categories,
+                // Categories = categories,
                 Users = new List<User>()
             };
             _repo.CreateProject(newProject);

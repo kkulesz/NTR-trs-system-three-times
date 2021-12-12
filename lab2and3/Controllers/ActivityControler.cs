@@ -30,7 +30,7 @@ namespace lab2and3.Controllers
             {
                 Year = year,
                 Month = month,
-                User = new User(executor),
+                UserLogin = executor,
                 Frozen = false
             };
 
@@ -65,11 +65,11 @@ namespace lab2and3.Controllers
             {
                 ActivityId = code,
                 Project = project,
-                User = new User(executor),
+                User = new User { UserId = executor },
                 Budget = budget,
                 AcceptedBudget = null,
                 Date = date,
-                Subactivities = subactivities,
+                // Subactivities = subactivities,
                 Description = description,
                 IsActive = true
             };
@@ -118,11 +118,11 @@ namespace lab2and3.Controllers
             {
                 ActivityId = code,
                 Project = project,
-                User = new User(executorName),
+                User = new User { UserId = executorName },
                 Budget = budget,
                 AcceptedBudget = acceptedBudget,
                 Date = date,
-                Subactivities = subactivities,
+                // Subactivities = subactivities,
                 Description = description,
                 IsActive = isActive
             };
@@ -142,7 +142,7 @@ namespace lab2and3.Controllers
             {
                 Year = date.Year,
                 Month = date.Month,
-                User = new User(executor),
+                UserLogin = executor,
                 Frozen = true
             };
 
