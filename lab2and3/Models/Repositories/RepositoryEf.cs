@@ -126,6 +126,9 @@ namespace lab2and3.Models.Repositories
                 return activity;
             }
         }
+        //https://entityframework.net/foreign-key
+        //https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli
+        //https://docs.microsoft.com/en-us/ef/core/cli/dotnet
 
         public Activity UpdateActivity(Activity activity)
         {
@@ -158,10 +161,12 @@ namespace lab2and3.Models.Repositories
             using (var ctx = new TrsContext())
             {
                 _ensureDatabaseCreated(ctx);
+                // workaround bug which doesn't allow comapring DateTime.Month in query because of nullability(?)
+                var startOfMonth = new DateTime(year, month, 1);
+                var endOfMonth = startOfMonth.AddMonths(1).AddSeconds(-1);
                 var activities = ctx.Activities.Where(ac =>
-                    ac.Executor == executor //&&
-                                            // ac.Date.Year == year &&
-                                            // ac.Date.Month == month
+                    ac.Executor == executor &&
+                    ac.Date >= startOfMonth && ac.Date <= endOfMonth
                 );
                 return activities.ToList();
             }
