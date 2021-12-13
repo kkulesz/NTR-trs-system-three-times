@@ -126,9 +126,6 @@ namespace lab2and3.Models.Repositories
                 return activity;
             }
         }
-        //https://entityframework.net/foreign-key
-        //https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli
-        //https://docs.microsoft.com/en-us/ef/core/cli/dotnet
 
         public Activity UpdateActivity(Activity activity)
         {
