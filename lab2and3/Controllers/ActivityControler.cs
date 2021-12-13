@@ -56,7 +56,7 @@ namespace lab2and3.Controllers
             return View(activeProjectNames);
         }
 
-        public IActionResult CreateActivity(string code, string projectName, int budget, DateTime date, List<String> subactivities, string description)
+        public IActionResult CreateActivity(string code, string projectName, int budget, DateTime date, string description)
         {
             string executor = this.HttpContext.Session.GetString(Constants.SessionKeyName);
             if (executor == null)
@@ -70,7 +70,7 @@ namespace lab2and3.Controllers
                 Budget = budget,
                 AcceptedBudget = null,
                 Date = date,
-                // Subactivities = subactivities,
+                Subactivities = null,
                 Description = description,
                 IsActive = true
             };
@@ -112,7 +112,7 @@ namespace lab2and3.Controllers
             return View(activity);
         }
 
-        public IActionResult UpdateActivity(string code, string projectName, string executorName, int budget, int acceptedBudget, DateTime date, List<String> subactivities, string description)
+        public IActionResult UpdateActivity(string code, string projectName, string executorName, int budget, int acceptedBudget, DateTime date, string description)
         {
             var updated = new Activity
             {
@@ -123,7 +123,7 @@ namespace lab2and3.Controllers
                 Budget = budget,
                 AcceptedBudget = acceptedBudget,
                 Date = date,
-                // Subactivities = subactivities,
+                Subactivities = null,
                 Description = description,
                 IsActive = true
             };

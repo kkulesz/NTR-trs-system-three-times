@@ -14,9 +14,11 @@ namespace lab2and3.Models.DomainModel
         public int Budget { get; set; }
         public Nullable<int> AcceptedBudget { get; set; }
         public DateTime Date { get; set; }
-        // public List<string> Subactivities { get; init; }
+        public List<Activity> Subactivities { get; init; }
         public string Description { get; set; }
         public bool IsActive { get; set; }
+
+        //  public DateTime CreatedAt { get; init; } = DateTime.Now;
 
         public Activity() { }
 
@@ -29,7 +31,7 @@ namespace lab2and3.Models.DomainModel
             Budget = acc.Budget;
             AcceptedBudget = acceptedBudget;
             Date = acc.Date;
-            // Subactivities = acc.Subactivities;
+            Subactivities = acc.Subactivities;
             Description = acc.Description;
             IsActive = isActive;
         }
