@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using lab2and3.Models.Repositories;
 
 namespace lab2and3.Migrations
 {
     [DbContext(typeof(TrsContext))]
-    partial class TrsContextModelSnapshot : ModelSnapshot
+    [Migration("20211213194957_switch-rowVersion-to-DateTime-and-switch-Timestamp-To-ConcurrencyToken-with-DatabaseGenerated")]
+    partial class switchrowVersiontoDateTimeandswitchTimestampToConcurrencyTokenwithDatabaseGenerated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

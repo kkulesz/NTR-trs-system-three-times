@@ -1,8 +1,9 @@
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 using lab2and3.Models.Repositories;
 using lab2and3.Models.DomainModel;
@@ -112,7 +113,7 @@ namespace lab2and3.Controllers
             return View(activity);
         }
 
-        public IActionResult UpdateActivity(string code, string projectName, string executorName, int budget, int acceptedBudget, DateTime date, string description)
+        public IActionResult UpdateActivity(string code, string projectName, string executorName, int budget, int acceptedBudget, DateTime date, string description, DateTime rowVersion)
         {
             var updated = new Activity
             {
@@ -125,12 +126,56 @@ namespace lab2and3.Controllers
                 Date = date,
                 Subactivities = null,
                 Description = description,
-                IsActive = true
+                IsActive = true,
+                RowVersion = rowVersion
             };
-            var result = _repo.UpdateActivity(updated);
-            if (result == null)
-                return _redirectToActivityView(); //TODO handle error
-            return _redirectToActivityView();
+            try
+            {
+                var result = _repo.UpdateActivity(updated);
+                return _redirectToActivityView();
+            }
+            catch (DbUpdateConcurrencyException exc)
+            {
+                ModelState.Clear();
+                var entry = exc.Entries.Single();
+                var dbEntry = entry.GetDatabaseValues();
+                if (dbEntry == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Unable to save changes. The department was deleted by another user.");
+                }
+                else
+                {
+                    var dbValues = (Activity)dbEntry.ToObject();
+                    var clValues = (Activity)entry.Entity;
+
+                    if (dbValues.Budget != clValues.Budget)
+                        ModelState.AddModelError("Budget", "Current value: " + dbValues.Budget);
+
+                    if (dbValues.AcceptedBudget != clValues.AcceptedBudget)
+                        ModelState.AddModelError("AcceptedBudget", "Current value: " + dbValues.AcceptedBudget);
+
+                    if (dbValues.Date != clValues.Date)
+                        ModelState.AddModelError("Date", "Current value: " + dbValues.Date);
+
+                    if (dbValues.Description != clValues.Description)
+                        ModelState.AddModelError("Description", "Current value: " + dbValues.Description);
+
+                    ModelState.AddModelError(string.Empty, "The record you attempted to edit "
+                                        + "was modified by another user after you got the original value. The "
+                                        + "edit operation was canceled and the current values in the database "
+                                        + "have been displayed. If you still want to edit this record, click "
+                                        + "the Save button again. Otherwise click the Back to List hyperlink.");
+                    updated.RowVersion = dbValues.RowVersion;
+                }
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            }
+
+            // if we are there, it means there was an error during update, 
+            // so we come back to update form instead of activity view
+            return RedirectToAction("UpdateActivityForm", new { code = code });
         }
 
         public IActionResult AcceptMonth(DateTime date)

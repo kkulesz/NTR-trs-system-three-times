@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace lab2and3.Models.DomainModel
@@ -20,6 +21,10 @@ namespace lab2and3.Models.DomainModel
 
         public DateTime CreatedAt { get; init; } = DateTime.Now;
         // public DateTime Lab2Field { get; init; } = DateTime.Now;
+
+        [ConcurrencyCheck]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime RowVersion {get; set;}
 
         public Activity() { }
 
