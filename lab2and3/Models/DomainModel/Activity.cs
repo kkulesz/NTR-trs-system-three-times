@@ -17,8 +17,8 @@ namespace lab2and3.Models.DomainModel
         public List<Activity> Subactivities { get; init; }
         public string Description { get; set; }
         public bool IsActive { get; set; }
-
-        //  public DateTime CreatedAt { get; init; } = DateTime.Now;
+        
+        public DateTime CreatedAt { get; init; } = DateTime.Now;
 
         public Activity() { }
 

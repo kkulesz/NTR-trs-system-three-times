@@ -13,6 +13,8 @@ namespace lab2and3.Models.DomainModel
         // public List<string> Categories { get; init; }
         public virtual ICollection<User> Users { get; set; }
 
+        public DateTime CreatedAt { get; init; } = DateTime.Now;
+
         public Project Inactive()
         {
             return new Project

@@ -14,6 +14,8 @@ namespace lab2and3.Models.DomainModel
         public string UserLogin { get; init; }
         public bool Frozen { get; init; }
 
+        public DateTime CreatedAt { get; init; } = DateTime.Now;
+
         public DateTime NextMonth()
         {
             if (Month == 12)
