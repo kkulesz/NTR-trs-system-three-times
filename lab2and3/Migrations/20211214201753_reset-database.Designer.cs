@@ -9,8 +9,8 @@ using lab2and3.Models.Repositories;
 namespace lab2and3.Migrations
 {
     [DbContext(typeof(TrsContext))]
-    [Migration("20211213180007_add-DateTime-aka-timestamp-fields-in-each-table")]
-    partial class addDateTimeakatimestampfieldsineachtable
+    [Migration("20211214201753_reset-database")]
+    partial class resetdatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,15 +21,15 @@ namespace lab2and3.Migrations
 
             modelBuilder.Entity("lab2and3.Models.DomainModel.Activity", b =>
                 {
-                    b.Property<byte[]>("ActivityId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("varbinary(16)");
+                        .HasColumnType("int");
 
                     b.Property<int?>("AcceptedBudget")
                         .HasColumnType("int");
 
-                    b.Property<byte[]>("ActivityId1")
-                        .HasColumnType("varbinary(16)");
+                    b.Property<int?>("ActivityId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Budget")
                         .HasColumnType("int");
@@ -55,9 +55,14 @@ namespace lab2and3.Migrations
                     b.Property<string>("Project")
                         .HasColumnType("text");
 
-                    b.HasKey("ActivityId");
+                    b.Property<DateTime>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime");
 
-                    b.HasIndex("ActivityId1");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityId");
 
                     b.ToTable("Activities");
                 });
@@ -142,7 +147,7 @@ namespace lab2and3.Migrations
                 {
                     b.HasOne("lab2and3.Models.DomainModel.Activity", null)
                         .WithMany("Subactivities")
-                        .HasForeignKey("ActivityId1");
+                        .HasForeignKey("ActivityId");
                 });
 
             modelBuilder.Entity("lab2and3.Models.DomainModel.User", b =>

@@ -19,15 +19,15 @@ namespace lab2and3.Migrations
 
             modelBuilder.Entity("lab2and3.Models.DomainModel.Activity", b =>
                 {
-                    b.Property<byte[]>("ActivityId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("varbinary(16)");
+                        .HasColumnType("int");
 
                     b.Property<int?>("AcceptedBudget")
                         .HasColumnType("int");
 
-                    b.Property<byte[]>("ActivityId1")
-                        .HasColumnType("varbinary(16)");
+                    b.Property<int?>("ActivityId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Budget")
                         .HasColumnType("int");
@@ -58,9 +58,9 @@ namespace lab2and3.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime");
 
-                    b.HasKey("ActivityId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("ActivityId1");
+                    b.HasIndex("ActivityId");
 
                     b.ToTable("Activities");
                 });
@@ -145,7 +145,7 @@ namespace lab2and3.Migrations
                 {
                     b.HasOne("lab2and3.Models.DomainModel.Activity", null)
                         .WithMany("Subactivities")
-                        .HasForeignKey("ActivityId1");
+                        .HasForeignKey("ActivityId");
                 });
 
             modelBuilder.Entity("lab2and3.Models.DomainModel.User", b =>

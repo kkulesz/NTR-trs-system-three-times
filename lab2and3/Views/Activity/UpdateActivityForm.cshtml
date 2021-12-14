@@ -1,42 +1,36 @@
 @model lab2and3.Models.DomainModel.Activity;
 
-<form asp-action="UpdateActivity" style="width: 30%;">
-    <div>
-        <input type="hidden" name="code" class="form-control" value=@Model.Code>
+@using (Html.BeginForm("UpdateActivity", "Activity", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.RowVersion)
+    @Html.HiddenFor(model => model.Project)
+    @Html.HiddenFor(model => model.Code)
+    @Html.HiddenFor(model => model.IsActive)
+    @Html.HiddenFor(model => model.CreatedAt)
+    @Html.HiddenFor(model => model.Executor)
+    
+    <div class="form-group">
+        @Html.LabelFor(model => model.Date)
+        <input class="text-box single-line" data-val="true" data-val-required="The Date field is required." id="Date"
+                   max=@DateTime.Now.ToString("yyyy-MM-dd") name="Date" type="date" value=@Model.Date.ToString("yyyy-MM-dd")>
+        @Html.ValidationMessageFor(model => model.Date, "", new {@class = "text-danger"})
     </div>
-    <div>
-        <input type="hidden" name="projectName" class="form-control" value=@Model.Project>
+    
+    <div class="form-group">
+        @Html.LabelFor(model => model.Budget, htmlAttributes:new{@class = "control-label col-md2"})
+        @Html.EditorFor(model => model.Budget, new {htmlAttributes = new {@class = "form-control"}})
+        @Html.ValidationMessageFor(model => model.Budget, "", new {@class = "text-danger"})
     </div>
-    <div>
-        <input type="hidden" name="acceptedBudget" class="form-control" value=@Model.AcceptedBudget>
+    
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description, htmlAttributes:new{@class = "control-label col-md2"})
+        @Html.EditorFor(model => model.Description, new {htmlAttributes = new {@class = "form-control"}})
+        @Html.ValidationMessageFor(model => model.Description, "", new {@class = "text-danger"})
     </div>
-    <div>
-        <input type="hidden" name="executorName" class="form-control" value=@Model.Executor>
-    </div>
-    <div>
-        <input type="hidden" name="isActive" class="form-control" value=@Model.IsActive>
-    </div>
-    <div>
-        <label>Budget</label>
-        <input name="budget" class="form-control" value=@Model.Budget>
-    </div>
-    <div class="input-group date" data-provide="datepicker">
-        <label>Date</label>
-        <input type="text" class="form-control" name="date" value=@Model.Date>
-        <div class="input-group-addon">
-            <span class="glyphicon glyphicon-th"></span>
-        </div>
-    </div>
-    <div>
-        <label>Description</label>
-        <input name="description" class="form-control" value=@Model.Description>
-    </div>
-    <div>
-        <input type="hidden" name="rowVersion" class="form-control" value=@Model.RowVersion>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Update</button>
-</form>
+        
+    <button class="btn btn-primary">Edit Activity</button>
+}
 
 <br><br><br>
 

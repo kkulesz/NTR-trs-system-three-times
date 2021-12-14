@@ -127,17 +127,14 @@ namespace lab2and3.Models.Repositories
             }
         }
 
-        public Activity UpdateActivity(Activity activity)
+        public Activity UpdateActivity(Activity updated)
         {
             using (var ctx = new TrsContext())
             {
                 _ensureDatabaseCreated(ctx);
-                var existing = ctx.Activities.Filter(ac => ac.Code == activity.Code).Single();
-                existing.AcceptedBudget = activity.AcceptedBudget;
-                existing.IsActive = activity.IsActive;
-                existing.Budget = activity.Budget;
-                existing.Description = activity.Description;
-                existing.Date = activity.Date;
+                var existing = ctx.Activities.Find(updated.Id);
+                ctx.Entry(existing).OriginalValues["RowVersion"] = updated.RowVersion;
+                ctx.Entry(existing).CurrentValues.SetValues(updated);
                 ctx.SaveChanges();
                 return existing;
             }
@@ -158,7 +155,7 @@ namespace lab2and3.Models.Repositories
             using (var ctx = new TrsContext())
             {
                 _ensureDatabaseCreated(ctx);
-                // workaround bug which doesn't allow comapring DateTime.Month in query because of nullability(?)
+                // bug workaround which doesn't allow comapring DateTime.Month in query because of nullability(?)
                 var startOfMonth = new DateTime(year, month, 1);
                 var endOfMonth = startOfMonth.AddMonths(1).AddSeconds(-1);
                 var activities = ctx.Activities.Where(ac =>

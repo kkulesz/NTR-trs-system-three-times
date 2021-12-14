@@ -64,7 +64,6 @@ namespace lab2and3.Controllers
                 return _redirectToLogin();
             var activity = new Activity
             {
-                ActivityId = Guid.NewGuid(),
                 Code = code,
                 Project = projectName,
                 Executor = executor,
@@ -113,22 +112,12 @@ namespace lab2and3.Controllers
             return View(activity);
         }
 
-        public IActionResult UpdateActivity(string code, string projectName, string executorName, int budget, int acceptedBudget, DateTime date, string description, DateTime rowVersion)
+        public IActionResult UpdateActivity(Activity updated)
         {
-            var updated = new Activity
-            {
-                ActivityId = Guid.NewGuid(),
-                Code = code,
-                Project = projectName,
-                Executor = executorName,
-                Budget = budget,
-                AcceptedBudget = acceptedBudget,
-                Date = date,
-                Subactivities = null,
-                Description = description,
-                IsActive = true,
-                RowVersion = rowVersion
-            };
+            string executor = this.HttpContext.Session.GetString(Constants.SessionKeyName);
+            if (executor == null)
+                return _redirectToLogin();
+
             try
             {
                 var result = _repo.UpdateActivity(updated);
@@ -138,14 +127,13 @@ namespace lab2and3.Controllers
             {
                 ModelState.Clear();
                 var entry = exc.Entries.Single();
-                var dbEntry = entry.GetDatabaseValues();
-                if (dbEntry == null)
+                var dbValues = _repo.GetActivity(updated.Code);
+                if (dbValues == null)
                 {
-                    ModelState.AddModelError(string.Empty, "Unable to save changes. The department was deleted by another user.");
+                    ModelState.AddModelError(string.Empty, "Unable to save changes. The Activity was deleted by another user.");
                 }
                 else
                 {
-                    var dbValues = (Activity)dbEntry.ToObject();
                     var clValues = (Activity)entry.Entity;
 
                     if (dbValues.Budget != clValues.Budget)
@@ -175,7 +163,9 @@ namespace lab2and3.Controllers
 
             // if we are there, it means there was an error during update, 
             // so we come back to update form instead of activity view
-            return RedirectToAction("UpdateActivityForm", new { code = code });
+
+            // return RedirectToAction("UpdateActivityForm", new { code = code });
+            return View("UpdateActivityForm", updated);
         }
 
         public IActionResult AcceptMonth(DateTime date)

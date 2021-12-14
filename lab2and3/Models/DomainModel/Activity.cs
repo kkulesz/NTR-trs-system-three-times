@@ -8,10 +8,10 @@ namespace lab2and3.Models.DomainModel
 {
     public record Activity
     {
-        public Guid ActivityId;
+        public int Id { get; init; }
         public string Code { get; init; }
         public string Project { get; init; }
-        public string Executor { get; init; }
+        public string Executor { get; set; }
         public int Budget { get; set; }
         public Nullable<int> AcceptedBudget { get; set; }
         public DateTime Date { get; set; }
@@ -24,13 +24,13 @@ namespace lab2and3.Models.DomainModel
 
         [ConcurrencyCheck]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime RowVersion {get; set;}
+        public DateTime RowVersion { get; set; }
 
         public Activity() { }
 
         private Activity(Activity acc, Nullable<int> acceptedBudget, bool isActive)
         {
-            ActivityId = acc.ActivityId;
+            Id = acc.Id;
             Code = acc.Code;
             Project = acc.Project;
             Executor = acc.Executor;

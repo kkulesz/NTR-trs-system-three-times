@@ -18,11 +18,6 @@ namespace lab2and3.Models.Repositories
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Activity>(entity =>
-            {
-                entity.HasKey(e => new { e.ActivityId });
-            });
         }
     }
 }

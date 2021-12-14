@@ -1,9 +1,10 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using MySql.EntityFrameworkCore.Metadata;
 
 namespace lab2and3.Migrations
 {
-    public partial class InitialWithGuidIds : Migration
+    public partial class resetdatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,7 +12,8 @@ namespace lab2and3.Migrations
                 name: "Activities",
                 columns: table => new
                 {
-                    ActivityId = table.Column<byte[]>(type: "varbinary(16)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Code = table.Column<string>(type: "text", nullable: true),
                     Project = table.Column<string>(type: "text", nullable: true),
                     Executor = table.Column<string>(type: "text", nullable: true),
@@ -19,11 +21,21 @@ namespace lab2and3.Migrations
                     AcceptedBudget = table.Column<int>(type: "int", nullable: true),
                     Date = table.Column<DateTime>(type: "datetime", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
+                    RowVersion = table.Column<DateTime>(type: "datetime", rowVersion: true, nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.ComputedColumn),
+                    ActivityId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Activities", x => x.ActivityId);
+                    table.PrimaryKey("PK_Activities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Activities_Activities_ActivityId",
+                        column: x => x.ActivityId,
+                        principalTable: "Activities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -34,7 +46,8 @@ namespace lab2and3.Migrations
                     Name = table.Column<string>(type: "text", nullable: true),
                     Owner = table.Column<string>(type: "text", nullable: true),
                     Budget = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,7 +62,8 @@ namespace lab2and3.Migrations
                     Year = table.Column<int>(type: "int", nullable: false),
                     Month = table.Column<int>(type: "int", nullable: false),
                     UserLogin = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    Frozen = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    Frozen = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -62,6 +76,7 @@ namespace lab2and3.Migrations
                 {
                     UserId = table.Column<byte[]>(type: "varbinary(16)", nullable: false),
                     Login = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
                     ProjectId = table.Column<byte[]>(type: "varbinary(16)", nullable: true)
                 },
                 constraints: table =>
@@ -74,6 +89,11 @@ namespace lab2and3.Migrations
                         principalColumn: "ProjectId",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Activities_ActivityId",
+                table: "Activities",
+                column: "ActivityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_ProjectId",
