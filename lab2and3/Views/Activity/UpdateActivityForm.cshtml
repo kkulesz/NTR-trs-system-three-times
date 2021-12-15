@@ -2,6 +2,7 @@
 
 @using (Html.BeginForm("UpdateActivity", "Activity", FormMethod.Post))
 {
+    @Html.ValidationSummary(true)
     @Html.HiddenFor(model => model.Id)
     @Html.HiddenFor(model => model.RowVersion)
     @Html.HiddenFor(model => model.Project)
