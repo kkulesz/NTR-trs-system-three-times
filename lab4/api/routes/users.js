@@ -1,18 +1,26 @@
+const Repository = require('../repository')
+
 const express = require('express')
 const router = express.Router()
+const bodyParser = require('body-parser');
+router.use(bodyParser.json());
 
+
+const repo = new Repository()
 
 router
     .route('/')
     .post((req, res) => {
-        res.send('user created')
+        const result = repo.createUser(req.body)
+        result ? res.send(result) : res.send(409)
     })
     .get((req, res) => {
-        res.send('list of all users')
+        res.send(repo.getUsers())
     })
 
 router.get('/:login', (req, res) => {
-    res.send('login')
+    const result = repo.getUser(req.params.login)
+    result ? res.send(result) : res.send(404)
 })
 
 module.exports = router
