@@ -22,13 +22,11 @@ class Repository {
     }
 
     getUsers() {
-        var result = this._fs.readFileSync(this._usersFilename, 'utf8')
-        return JSON.parse(result);
+        return this._getUsers()
     }
 
     getUser(login) {
         const users = this.getUsers()
-        console.log(users)
         return users.find(u => u.login == login)
     }
 
@@ -54,13 +52,21 @@ class Repository {
         }
     }
 
+    // users
     _saveUsers(users) { this._writeToFile(this._usersFilename, users) }
+    _getUsers() { return JSON.parse(this._readFromFile(this._usersFilename)) }
 
+    //projects
     _saveProjects(projects) { this._writeToFile(this._projectsFilename, projects) }
+    _getProjects() { return JSON.parse(this._readFromFile(this._projectsFilename)) }
 
+    //activities
     _saveActivities(activities) { this._writeToFile(this._activitiesFilename, activities) }
+    _getActivities() { return JSON.parse(this._readFromFile(this._activitiesFilename)) }
 
+    // general
     _writeToFile(filename, objects) { this._fs.writeFile(filename, JSON.stringify(objects), () => { }) }
+    _readFromFile(filename) { return this._fs.readFileSync(filename, 'utf8') }
 }
 
 module.exports = Repository

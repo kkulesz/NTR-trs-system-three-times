@@ -12,7 +12,7 @@ router
     .route('/')
     .post((req, res) => {
         const result = repo.createUser(req.body)
-        result ? res.send(result) : res.send(409)
+        result ? res.send(result) : res.send(409) //conflict
     })
     .get((req, res) => {
         res.send(repo.getUsers())
@@ -20,7 +20,7 @@ router
 
 router.get('/:login', (req, res) => {
     const result = repo.getUser(req.params.login)
-    result ? res.send(result) : res.send(404)
+    result ? res.send(result) : res.send(404) // not found
 })
 
 module.exports = router
