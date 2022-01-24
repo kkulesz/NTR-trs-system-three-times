@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react'
+import CreateUserForm from '../components/CreateUserForm'
+import UsersList from '../components/UsersList'
 
-function Start() {
-  return <div>dupa</div>;
+import { fetchUsers } from '../dataSource/api'
+
+const Start = () => {
+  const [users, setUsers] = useState([])
+  useEffect(() => {
+    fetchUsers().then((res) => {
+      setUsers(res)
+    })
+  }, [])
+
+  return (
+    <div>
+      <UsersList users={users} />
+      <CreateUserForm />
+    </div>
+  )
+
 }
 
 export default Start;

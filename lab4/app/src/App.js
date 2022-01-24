@@ -5,14 +5,16 @@ import Start from './pages/Start'
 import Footer from './components/Footer'
 import NavigationBar from './components/NavigationBar'
 
-function App() {
+const App = () => {
   return (
     <div className="App">
       <Router>
         <NavigationBar />
+
         <Routes>
-          <Route path="/" element={<Start />} />
+          <Route path="/" element={<Start />} / >
         </Routes>
+
         <Footer />
       </Router>
     </div>
