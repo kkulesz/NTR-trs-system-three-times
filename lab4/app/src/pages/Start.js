@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import CreateUserForm from '../components/CreateUserForm'
 import UsersList from '../components/UsersList'
 
-import { fetchUsers } from '../dataSource/api'
+import { fetchUsers } from '../dataSource/usersApi'
 
 const Start = () => {
   const [users, setUsers] = useState([])

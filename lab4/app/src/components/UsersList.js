@@ -1,12 +1,13 @@
 import React from 'react'
-import { Link, Navigate } from 'react-router-dom'
-import { getUser } from '../dataSource/api'
+import { getUser } from '../dataSource/usersApi'
+import { useNavigate } from 'react-router-dom';
 
-import { useGlobalContext } from '../state'
+import { useGlobalState } from '../state'
 
 
 const UsersList = (props) => {
-    const {setUser} = useGlobalContext()
+    const { setUser } = useGlobalState()
+    const navigate = useNavigate();
 
     const users = props.users
     const onClick = async (e) => {
@@ -17,6 +18,7 @@ const UsersList = (props) => {
         console.log(response)
         localStorage.setItem('loggedUser', login)
         setUser(login)
+        navigate('/activitiesDashboard');
         // IF NOT navigate('TODO')
     };
 

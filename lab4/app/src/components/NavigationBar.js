@@ -1,10 +1,10 @@
 import React from 'react';
-import { Link, Navigate } from 'react-router-dom';
-import { useGlobalContext } from '../state';
+import { Link } from 'react-router-dom';
+import { useGlobalState } from '../state';
 
 
 const NavigationBar = () => {
-  const { loggedUser } = useGlobalContext();
+  const { loggedUser } = useGlobalState();
 
 
   return (
@@ -16,7 +16,14 @@ const NavigationBar = () => {
           </Link>
           {
             loggedUser !== '' && // do not render if not logged in
-            <div>TODO navigation {loggedUser}</div>
+
+            <Link to="/activitiesDashboard">
+              Activities
+            </Link>
+          }
+          {
+            loggedUser === '' &&
+            <div>TODO navigation and logout {loggedUser}</div>
           }
         </div>
 

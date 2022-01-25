@@ -14,12 +14,12 @@ app.use('/users', userRouter)
 const projectRouter = require('./routes/projects')
 app.use('/projects', projectRouter)
 
+const activitiesRouter = require('./routes/activities')
+app.use('/activities', activitiesRouter)
+
 
 app.use(express.static(path.join(__dirname, '../app/build')));
 app.get("/", (req, res) =>
   res.sendFile(path.join(__dirname, "../app/build", "index.html"))
 );
 
-
-
-// app.listen(3001)

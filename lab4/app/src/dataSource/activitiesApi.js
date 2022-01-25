@@ -1,0 +1,33 @@
+import fetch from 'node-fetch';
+
+import { domainPath } from './commons';
+
+const activitiesPath = `${domainPath}/activities`
+
+export const fetchActivitiesForDay = async (year, month, day, user) => {
+    return fetch(`${activitiesPath}?user=${user}&year=${year}&month=${month}&day=${day}`, {
+        method: 'GET'
+    }).then((resp) => {
+        return resp.json()
+    }).then((data) => {
+        return data
+    })
+}
+
+export const deleteActivity = async (code, user) => {
+    return fetch(`${activitiesPath}?user=${user}&code=${code}`, {
+        method: 'DELETE'
+    }).then(() => { })
+}
+
+export const createActivity = async (user, code, project, budget) => {
+    return fetch(activitiesPath, {
+        method: 'POST',
+        body: JSON.stringify({ "owner": user, "code": code, "project": project, "budget": budget }),
+        headers: { 'Content-Type': 'application/json' }
+    }).then((resp) => {
+        return resp.json()
+    }).then((data) => {
+        return data
+    })
+}

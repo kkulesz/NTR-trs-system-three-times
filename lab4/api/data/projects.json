@@ -1,1 +1,10 @@
-[]
+[
+    {
+        "owner": "student",
+        "name": "piwo"
+    },
+    {
+        "owner": "prowadzacy",
+        "name": "NTR"
+    }
+]

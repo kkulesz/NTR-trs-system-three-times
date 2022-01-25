@@ -1,24 +1,19 @@
+const Repository = require('../repository')
+
 const express = require('express')
 const router = express.Router()
+const bodyParser = require('body-parser');
+router.use(bodyParser.json());
+
+const repo = new Repository()
 
 router
     .route('/')
-    .post((req, res) => {
-        res.send('project created')
-    })
+    // .post((req, res) => {
+    //     res.send('project created')
+    // })
     .get((req, res) => {
-        res.send('list of all projects of user')
+        res.send(repo.getProjects())
     })
-
-router
-    .route('/:projectName/activities')
-    .post((req, res) => {
-        res.send(`activity for ${req.params.projectName} created`)
-    })
-    .get((req, res) => {
-        res.send('list of all activities of project')
-    })
-
-
 
 module.exports = router

@@ -10,6 +10,7 @@ class Repository {
         this._makeSureEverythingExists()
     }
 
+    /*****      USERS      *****/
     createUser(newUser) {
         const users = this.getUsers()
         if (users.find(u => u.login === newUser.login)) {
@@ -26,10 +27,61 @@ class Repository {
     }
 
     getUser(login) {
-        const users = this.getUsers()
+        const users = this._getUsers()
         return users.find(u => u.login == login)
     }
 
+    /*****      ACTIVITES      *****/
+    getActivities(login, year, month, day) {
+        const allActivites = this._getActivities()
+        return allActivites.filter(act => act.owner === login)
+    }
+
+    getActivity(login, code) {
+        const users = this.getUsers()
+        return users.find(u => u.login === login)
+    }
+
+    createActivity(newActivity) {
+        const allActivites = this._getActivities()
+        allActivites.push(newActivity)
+        this._saveActivities(allActivites)
+        return newActivity
+    }
+
+    deleteActivity(login, code) {
+        const allActivites = this._getActivities()
+        const filtered = allActivites.filter(act => !(act.owner === login && act.code === code))
+        if (filtered.length == allActivites) {
+            return false
+        } else {
+            this._saveActivities(filtered.length > 0 ? filtered : [])
+            return true
+        }
+
+    }
+
+    updateActivity(login, updatedActivity) {
+        const allActivites = this._getActivities()
+        let found = false
+        const updated = allActivites.map(act => {
+            if (act.owner === login && act.code === updatedActivity.code) {
+                console.log('essa')
+                found = true
+                return updatedActivity
+            } else {
+                return act
+            }
+        })
+        this._saveActivities(updated)
+        return found
+    }
+
+
+    /*****      PROJECTS      *****/
+    getProjects(){
+        return this._getProjects()
+    }
 
 
 
@@ -54,19 +106,32 @@ class Repository {
 
     // users
     _saveUsers(users) { this._writeToFile(this._usersFilename, users) }
-    _getUsers() { return JSON.parse(this._readFromFile(this._usersFilename)) }
+    _getUsers() { return this._readFromFile(this._usersFilename) }
 
     //projects
     _saveProjects(projects) { this._writeToFile(this._projectsFilename, projects) }
-    _getProjects() { return JSON.parse(this._readFromFile(this._projectsFilename)) }
+    _getProjects() { return this._readFromFile(this._projectsFilename) }
 
     //activities
     _saveActivities(activities) { this._writeToFile(this._activitiesFilename, activities) }
-    _getActivities() { return JSON.parse(this._readFromFile(this._activitiesFilename)) }
+    _getActivities() { return this._readFromFile(this._activitiesFilename) }
 
     // general
-    _writeToFile(filename, objects) { this._fs.writeFile(filename, JSON.stringify(objects), () => { }) }
-    _readFromFile(filename) { return this._fs.readFileSync(filename, 'utf8') }
+    _writeToFile(filename, objects) {
+        this._fs.writeFile(
+            filename,
+            JSON.stringify(objects),
+            () => { }
+        )
+    }
+
+    _readFromFile(filename) {
+        try {
+            return JSON.parse(this._fs.readFileSync(filename, 'utf8'))
+        } catch {
+            return []
+        }
+    }
 }
 
 module.exports = Repository

@@ -5,6 +5,7 @@ const AppContext = React.createContext();
 const AppState = ({ children }) => {
     let date = new Date();
     const [loggedUser, setUser] = useState(localStorage.getItem('loggedUser') || '');
+    const [chosenDay, setDay] = useState(parseInt(localStorage.getItem('chosenDay')) || date.getDay());
     const [chosenMonth, setMonth] = useState(parseInt(localStorage.getItem('chosenMonth')) || date.getMonth() + 1);
     const [chosenYear, setYear] = useState(parseInt(localStorage.getItem('chosenYear')) || date.getFullYear());
 
@@ -14,6 +15,8 @@ const AppState = ({ children }) => {
             value={{
                 loggedUser,
                 setUser,
+                chosenDay,
+                setDay,
                 chosenMonth,
                 setMonth,
                 chosenYear,
@@ -25,7 +28,7 @@ const AppState = ({ children }) => {
     );
 };
 
-export const useGlobalContext = () => {
+export const useGlobalState = () => {
     return useContext(AppContext);
 };
 

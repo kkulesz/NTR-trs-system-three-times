@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { createUser } from '../dataSource/api';
+import { createUser } from '../dataSource/usersApi';
+import { useNavigate } from 'react-router-dom';
 
-import { useGlobalContext } from '../state'
+import { useGlobalState } from '../state'
 
 const CreateUserForm = () => {
-    const {setUser} = useGlobalContext()
+    const {setUser} = useGlobalState()
+    const navigate = useNavigate();
 
     const [userLogin, setUserLogin] = useState('');
     const handleChange = (e) => setUserLogin(e.target.value);
     const handleSubmit = async (e) => {
-        console.log(userLogin) //TODO to remove
         e.preventDefault()
         
         const response = await createUser(userLogin)
@@ -18,6 +19,7 @@ const CreateUserForm = () => {
         //if success
         localStorage.setItem('loggedUser', userLogin)
         setUser(userLogin)
+        navigate('/activitiesDashboard');
 
         //if not
         //TODO
@@ -39,7 +41,7 @@ const CreateUserForm = () => {
                         />
                         <input
                             type="submit"
-                            value="Add"
+                            value="Register"
                             // className="btn btn-primary"
                             style={{ marginTop: '10px' }}
                         />
