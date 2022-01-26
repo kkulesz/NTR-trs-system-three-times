@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
 
 import { fetchActiveProjects } from '../dataSource/projectsApi'
-import { useGlobalState } from '../state'
 
 const ProjectsDashBoard = () => {
-    const { loggedUser } = useGlobalState()
     const [projects, setProjects] = useState([])
     useEffect(() => {
         fetchActiveProjects()
             .then((res) => { setProjects(res) })
     }, [])
-    console.log(projects)
 
+    console.log(projects)
     return (
         <div>
             {projects.map(
-                (p) => { <div>{p}</div> }
+                p => { return <div>owner={p.owner}, project={p.name}, acceptedBudget={p.acceptedBudget}</div> }
             )}
         </div>
     )

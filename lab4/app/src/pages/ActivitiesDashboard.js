@@ -14,12 +14,17 @@ const ActivitiesDashboard = () => {
       .then((res) => { setActivities(res) })
   }, [])
 
-  const summedBudget = activities.reduce((acc, curr) => acc + curr.budget, 0)
+  const summedBudget = activities.reduce(
+    (acc, curr) => parseInt(acc) + parseInt(curr.budget), 0
+  )
   return (
     <div>
       <div>
         {chosenYear}-{chosenMonth}-{chosenDay}
       </div>
+      <Link to="/changeDate">
+        change chosen date
+      </Link>
       <div>
         <ActivitesList activities={activities} />
       </div>
@@ -30,6 +35,8 @@ const ActivitiesDashboard = () => {
       <Link to="/createActivityForm">
         Create new activity
       </Link>
+      <div></div>
+
 
     </div>
   )

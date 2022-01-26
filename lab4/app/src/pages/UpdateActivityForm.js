@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { updateActivity } from '../dataSource/activitiesApi';
-import { useGlobalState } from '../state'
 
 const UpdateActivityForm = () => {
     const navigate = useNavigate();
@@ -21,16 +20,18 @@ const UpdateActivityForm = () => {
         const value = e.target.value;
         setInputs((values) => ({ ...values, [name]: value }));
     }
-    const handleSubmit = () => {
-        updateActivity(activity.owner, inputs.code, inputs.project, inputs.budget,
+    const handleSubmit = async () => {
+        await updateActivity(activity.owner, inputs.code, inputs.project, inputs.budget,
             inputs.description, inputs.year, inputs.month, inputs.day)
-        navigate('/activitiesDashboard');
+            .then()
+        setTimeout(() => navigate('/activitiesDashboard'), 1000)
+        // navigate('/activitiesDashboard')
     }
 
 
     return (
         <div>
-            <form onSubmit={handleSubmit}>
+            <form >
                 {/* <label>
                     Code:
                     <input type="text" name="code" onChange={handleChange} />
@@ -50,10 +51,10 @@ const UpdateActivityForm = () => {
                     <input type="text" value={inputs.description} name="description" onChange={handleChange} />
                 </label>
                 <div>
-                    <input type="submit" value="Update" />
+                    <input type="button" value="Update" onClick={handleSubmit} />
                 </div>
             </form>
-            <Link to="/activitiesDashboard">
+            <Link to="/activitiesDashboard" >
                 Back
             </Link>
         </div>

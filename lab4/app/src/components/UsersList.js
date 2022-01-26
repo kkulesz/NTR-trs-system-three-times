@@ -14,8 +14,8 @@ const UsersList = (props) => {
         e.preventDefault()
         const login = e.target.value
 
-        const response = await getUser(login)
-        console.log(response)
+        // const response = 
+        await getUser(login)
         localStorage.setItem('loggedUser', login)
         setUser(login)
         navigate('/activitiesDashboard');

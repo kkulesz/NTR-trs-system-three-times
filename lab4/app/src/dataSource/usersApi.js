@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 
-import { domainPath } from './commons';
+import { domainPath, headers } from './commons';
 
 const usersPath = `${domainPath}/users`
 
@@ -17,7 +17,8 @@ export const fetchUsers = async () => {
 
 export const getUser = async (login) => {
     return fetch(`${usersPath}/${login}`, {
-        method: 'GET'
+        method: 'GET',
+        headers: headers
     }).then((resp) => {
         return resp.json()
     }).then((data) => {

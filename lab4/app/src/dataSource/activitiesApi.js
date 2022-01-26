@@ -1,12 +1,13 @@
 import fetch from 'node-fetch';
 
-import { domainPath } from './commons';
+import { domainPath, headers } from './commons';
 
 const activitiesPath = `${domainPath}/activities`
 
 export const fetchActivitiesForDay = async (year, month, day, user) => {
     return fetch(`${activitiesPath}?user=${user}&year=${year}&month=${month}&day=${day}`, {
-        method: 'GET'
+        method: 'GET',
+        headers: headers
     }).then((resp) => {
         return resp.json()
     }).then((data) => {

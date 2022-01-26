@@ -13,11 +13,11 @@ const CreateUserForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         
-        const response = await createUser(userLogin)
-        console.log(response)
+        // const response = 
+        await createUser(userLogin)
         
         //if success
-        localStorage.setItem('loggedUser', userLogin)
+        // localStorage.setItem('loggedUser', userLogin)
         setUser(userLogin)
         navigate('/activitiesDashboard');
 

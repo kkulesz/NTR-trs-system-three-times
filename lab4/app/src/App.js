@@ -11,6 +11,7 @@ import Footer from './components/Footer'
 import NavigationBar from './components/NavigationBar'
 import UpdateActivityForm from './pages/UpdateActivityForm';
 import ProjectsDashBoard from './pages/ProjectsDashboard';
+import ChangeDateForm from './pages/ChangeDateForm';
 
 
 
@@ -27,6 +28,7 @@ const App = () => {
           <Route path="/displayActivity" element={<DisplayActivity />} />
           <Route path="/updateActivityForm" element={<UpdateActivityForm />} />
           <Route path="/projectsDashboard" element={<ProjectsDashBoard />} />
+          <Route path="/changeDate" element={<ChangeDateForm />} />
         </Routes>
 
         <Footer />

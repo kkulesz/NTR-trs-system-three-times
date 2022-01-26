@@ -1,10 +1,12 @@
 [
     {
         "owner": "student",
-        "name": "piwo"
+        "name": "piwo",
+        "acceptedBudget": 2137
     },
     {
         "owner": "prowadzacy",
-        "name": "NTR"
+        "name": "NTR",
+        "acceptedBudget": 420
     }
 ]

@@ -28,7 +28,7 @@ router
         repo.deleteActivity(user, code) ? res.sendStatus(200) : res.sendStatus(404) //not found
     })
     .put((req, res) => {
-        const user = req.body.owner //TODO
+        const user = req.body.owner //TODO in authorization
         repo.updateActivity(user, req.body) ? res.send(req.body) : res.sendStatus(404)
     })
 

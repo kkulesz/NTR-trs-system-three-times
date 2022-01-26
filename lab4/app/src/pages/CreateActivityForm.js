@@ -28,11 +28,10 @@ const CreateActivityForm = () => {
         const value = e.target.value;
         setInputs((values) => ({ ...values, [name]: value }));
     }
-    const handleSubmit = () => {
-        createActivity(loggedUser, inputs.code, inputs.project, inputs.budget,
-            inputs.description, inputs.year, inputs.month, inputs.day)
-
-        navigate('/activitiesDashboard');
+    const handleSubmit = async () => {
+        await createActivity(loggedUser, inputs.code, inputs.project, inputs.budget,
+            inputs.description, inputs.year, inputs.month, inputs.day).then()
+        setTimeout(() => navigate('/activitiesDashboard'), 1000)
     }
     return (
         <div>

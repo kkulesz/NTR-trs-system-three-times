@@ -34,7 +34,11 @@ class Repository {
     /*****      ACTIVITES      *****/
     getActivities(login, year, month, day) {
         const allActivites = this._getActivities()
-        return allActivites.filter(act => act.owner === login)
+        return allActivites.filter(
+            act => act.owner == login &&
+                act.year == year &&
+                act.month == month &&
+                act.day == day)
     }
 
     getActivity(login, code) {
@@ -78,7 +82,7 @@ class Repository {
 
 
     /*****      PROJECTS      *****/
-    getProjects(){
+    getProjects() {
         return this._getProjects()
     }
 
