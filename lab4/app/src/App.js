@@ -7,7 +7,6 @@ import ActivitiesDashboard from './pages/ActivitiesDashboard'
 import CreateActivityForm from './pages/CreateActivityForm';
 import DisplayActivity from './pages/DisplayActivity';
 
-import Footer from './components/Footer'
 import NavigationBar from './components/NavigationBar'
 import UpdateActivityForm from './pages/UpdateActivityForm';
 import ProjectsDashBoard from './pages/ProjectsDashboard';
@@ -30,8 +29,6 @@ const App = () => {
           <Route path="/projectsDashboard" element={<ProjectsDashBoard />} />
           <Route path="/changeDate" element={<ChangeDateForm />} />
         </Routes>
-
-        <Footer />
       </Router>
     </div>
   );

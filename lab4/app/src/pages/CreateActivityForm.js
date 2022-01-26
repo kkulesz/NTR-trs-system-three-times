@@ -31,11 +31,12 @@ const CreateActivityForm = () => {
     const handleSubmit = async () => {
         await createActivity(loggedUser, inputs.code, inputs.project, inputs.budget,
             inputs.description, inputs.year, inputs.month, inputs.day).then()
-        setTimeout(() => navigate('/activitiesDashboard'), 1000)
+        setTimeout(() => navigate('/activitiesDashboard'), 400)
+        // navigate('/activitiesDashboard')
     }
     return (
         <div>
-            <form onSubmit={handleSubmit}>
+            <form>
                 <label>
                     Code:
                     <input type="text" name="code" onChange={handleChange} />
@@ -55,7 +56,7 @@ const CreateActivityForm = () => {
                     <input type="text" name="description" onChange={handleChange} />
                 </label>
                 <div>
-                    <input type="submit" value="Create" />
+                    <input type="button" value="Create" onClick={handleSubmit}/>
                 </div>
             </form>
             <Link to="/activitiesDashboard">

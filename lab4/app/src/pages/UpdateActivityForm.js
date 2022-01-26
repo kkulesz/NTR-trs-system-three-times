@@ -24,7 +24,7 @@ const UpdateActivityForm = () => {
         await updateActivity(activity.owner, inputs.code, inputs.project, inputs.budget,
             inputs.description, inputs.year, inputs.month, inputs.day)
             .then()
-        setTimeout(() => navigate('/activitiesDashboard'), 1000)
+        setTimeout(() => navigate('/activitiesDashboard'), 400)
         // navigate('/activitiesDashboard')
     }
 

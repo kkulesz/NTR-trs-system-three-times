@@ -2,46 +2,11 @@
   {
     "owner": "student",
     "code": "100",
-    "budget": "110",
-    "description": "zxczcx",
+    "project": "piwo",
+    "budget": "123",
+    "description": "123",
     "year": 2022,
     "month": 1,
     "day": 3
-  },
-  {
-    "owner": "student",
-    "code": "azxcxz",
-    "project": "NTR",
-    "budget": 100,
-    "year": 2022,
-    "month": 1,
-    "day": 31
-  },
-  {
-    "owner": "student",
-    "code": "azxcxz",
-    "project": "NTR",
-    "budget": 100,
-    "year": 2022,
-    "month": 1,
-    "day": 31
-  },
-  {
-    "owner": "student",
-    "code": "azxcxz",
-    "project": "NTR",
-    "budget": 100,
-    "year": 2022,
-    "month": 1,
-    "day": 31
-  },
-  {
-    "owner": "student",
-    "code": "azxcxz",
-    "project": "NTR",
-    "budget": 100,
-    "year": 2022,
-    "month": 1,
-    "day": 31
   }
 ]
