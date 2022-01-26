@@ -10,6 +10,7 @@ import DisplayActivity from './pages/DisplayActivity';
 import Footer from './components/Footer'
 import NavigationBar from './components/NavigationBar'
 import UpdateActivityForm from './pages/UpdateActivityForm';
+import ProjectsDashBoard from './pages/ProjectsDashboard';
 
 
 
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/createActivityForm" element={<CreateActivityForm />} />
           <Route path="/displayActivity" element={<DisplayActivity />} />
           <Route path="/updateActivityForm" element={<UpdateActivityForm />} />
+          <Route path="/projectsDashboard" element={<ProjectsDashBoard />} />
         </Routes>
 
         <Footer />

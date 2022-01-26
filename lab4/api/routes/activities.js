@@ -16,8 +16,6 @@ router
         const year = queryParams.year
         const month = queryParams.month
         const day = queryParams.day
-        // console.log(user, year)
-        // console.log(repo.getActivities(user, year, month, day))
         res.send(repo.getActivities(user, year, month, day))
     })
     .post((req, res) => {

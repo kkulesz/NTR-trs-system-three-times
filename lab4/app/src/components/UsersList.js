@@ -25,7 +25,7 @@ const UsersList = (props) => {
     return (
         <div>
             <h1 className="display-4" style={{ marginBottom: '2rem' }}>
-                Jakiś nagłówek
+                Konrad Kulesza
             </h1>
             <div>
                 <form>

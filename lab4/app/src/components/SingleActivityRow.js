@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useGlobalState } from '../state';
 
 import { deleteActivity } from '../dataSource/activitiesApi';
@@ -7,24 +7,26 @@ import { deleteActivity } from '../dataSource/activitiesApi';
 const SingleActivityRow = (params) => {
     const activity = params.activity
     const { loggedUser } = useGlobalState()
+    const navigate = useNavigate();
 
     const handleDelete = () => {
+
         deleteActivity(activity.code, loggedUser)
+        navigate('/activitiesDashboard');
     }
 
     return <div>
-        {activity.code}
-        <Link to={{ pathname: "/displayActivity", state: activity }}>
+        {activity.code} - {activity.budget} -
+        <Link to={"/displayActivity"} state={{ activity }}>
             show
-        </Link>
-        <Link to={{ pathname: "/updateActivityForm", state: activity }}>
+        </Link> -
+        <Link to={"/updateActivityForm"} state={{ activity }}>
             update
-        </Link>
+        </Link> -
 
         <input
             type="submit"
             value="delete"
-            // className="btn btn-primary"
             style={{ marginTop: '10px' }}
             onClick={handleDelete}
         />

@@ -26,7 +26,6 @@ export const getUser = async (login) => {
 }
 
 export const createUser = async (login) => {
-    console.log(login)
     return fetch(`${usersPath}`, {
         method: 'POST',
         body: JSON.stringify({ "login": login }),

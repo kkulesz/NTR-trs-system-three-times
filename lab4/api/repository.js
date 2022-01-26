@@ -66,7 +66,6 @@ class Repository {
         let found = false
         const updated = allActivites.map(act => {
             if (act.owner === login && act.code === updatedActivity.code) {
-                console.log('essa')
                 found = true
                 return updatedActivity
             } else {
@@ -120,7 +119,7 @@ class Repository {
     _writeToFile(filename, objects) {
         this._fs.writeFile(
             filename,
-            JSON.stringify(objects),
+            JSON.stringify(objects, null, 2),
             () => { }
         )
     }

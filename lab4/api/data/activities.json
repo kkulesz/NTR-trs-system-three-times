@@ -1,1 +1,20 @@
-[{"owner":"student","code":"1234","budget":100}]
+[
+  {
+    "owner": "student",
+    "code": "ASD",
+    "budget": "100",
+    "description": "description",
+    "year": 2022,
+    "month": 1,
+    "day": 3
+  },
+  {
+    "owner": "student",
+    "code": "12321",
+    "budget": "123213",
+    "description": "1231231",
+    "year": 2022,
+    "month": 1,
+    "day": 3
+  }
+]

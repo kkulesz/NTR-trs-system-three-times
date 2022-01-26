@@ -9,24 +9,21 @@ const NavigationBar = () => {
 
   return (
     <header>
+      <h4>logged as: {loggedUser}</h4>
       <nav>
         <div>
           <Link to="/">
-            KonradKulesza
+            Home
           </Link>
-          {
-            loggedUser !== '' && // do not render if not logged in
 
-            <Link to="/activitiesDashboard">
-              Activities
-            </Link>
-          }
-          {
-            loggedUser === '' &&
-            <div>TODO navigation and logout {loggedUser}</div>
-          }
+          <Link to="/activitiesDashboard">
+            Activities
+          </Link>
+
+          <Link to="/projectsDashboard">
+            Projects
+          </Link>
         </div>
-
       </nav>
     </header>
   )

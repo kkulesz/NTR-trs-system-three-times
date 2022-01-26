@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from 'react'
 
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
-const CreateActivityForm = () => {
-
-
+const DisplayActivity = () => {
+    const location = useLocation()
+    const activity = location.state.activity
 
     return (
         <div>
-            <form>
-                
-            </form>
+            code={activity.code}, budget={activity.budget}, project={activity.project}
+            <br />
             <Link to="/activitiesDashboard">
                 Back
             </Link>
         </div>
     )
-
 }
 
-export default CreateActivityForm;
+export default DisplayActivity;

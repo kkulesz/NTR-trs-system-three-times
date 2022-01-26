@@ -20,10 +20,34 @@ export const deleteActivity = async (code, user) => {
     }).then(() => { })
 }
 
-export const createActivity = async (user, code, project, budget) => {
+export const createActivity = async (user, code, project, budget, description, year, month, day) => {
     return fetch(activitiesPath, {
         method: 'POST',
-        body: JSON.stringify({ "owner": user, "code": code, "project": project, "budget": budget }),
+        body: JSON.stringify(
+            {
+                "owner": user, "code": code, "project": project,
+                "budget": budget, "description": description,
+                "year": year, "month": month, "day": day
+            }
+        ),
+        headers: { 'Content-Type': 'application/json' }
+    }).then((resp) => {
+        return resp.json()
+    }).then((data) => {
+        return data
+    })
+}
+
+export const updateActivity = async (user, code, project, budget, description, year, month, day) => {
+    return fetch(activitiesPath, {
+        method: 'PUT',
+        body: JSON.stringify(
+            {
+                "owner": user, "code": code, "project": project,
+                "budget": budget, "description": description,
+                "year": year, "month": month, "day": day
+            }
+        ),
         headers: { 'Content-Type': 'application/json' }
     }).then((resp) => {
         return resp.json()
